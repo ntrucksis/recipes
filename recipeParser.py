@@ -9,9 +9,10 @@ response = requests.get(requestUrl)
 # initialize beautiful soup object from web response 
 soup = BeautifulSoup(response.text)
 
-# access the recipe title
+# access & format the recipe title
 recipeTitle = soup.title.string
-
+recipeTitle = recipeTitle.split('-')
+recipeTitle = recipeTitle[0]
 
 print(soup.encode('utf-8'))
 print(response.status_code)
