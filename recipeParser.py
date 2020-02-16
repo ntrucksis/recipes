@@ -2,13 +2,17 @@ from bs4 import BeautifulSoup
 import json
 import requests
 
-requestUrl =  "https://www.allrecipes.com/recipe/175383/shrimp-scampi-with-linguini/print/?recipeType=Recipe&servings=4&isMetric=false"
+requestUrl =  "https://www.allrecipes.com/recipe/175383/shrimp-scampi-with-linguini/?internalSource=previously%20viewed&referringContentType=Homepage&clickId=cardslot%204"
 
-request = requests.get(requestUrl)
+response = requests.get(requestUrl)
 
-# json.parse wasn't working, this just prints the whole html doc
-jsonResponse = json.dumps(request.text)
+# initialize beautiful soup object from web response 
+soup = BeautifulSoup(response.text)
 
-responseSoup = BeautifulSoup(request.text).encode('utf-8')
+# access the recipe title
+recipeTitle = soup.title.string
 
-print(responseSoup)
+
+print(soup.encode('utf-8'))
+print(response.status_code)
+print(recipeTitle)
