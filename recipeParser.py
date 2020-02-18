@@ -74,7 +74,7 @@ def getIngredientsObject(ingredientsList):
         }
         
         # So that we don't add the recipe section names to the ingredients
-        if quant != "" and msmt != "": 
+        if quant != "": 
             ingredients.append(ingredientObj)
         
     return ingredients
