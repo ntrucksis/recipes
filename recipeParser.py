@@ -4,73 +4,74 @@ import requests
 from nltk import pos_tag, word_tokenize
 import sys
 
-requestUrl = input("Enter the Url of Recipe Page: ")
-# requestUrl =  "https://www.allrecipes.com/recipe/175383/shrimp-scampi-with-linguini/?internalSource=previously%20viewed&referringContentType=Homepage&clickId=cardslot%204"
+def getIngredientsObject(ingredientsList):
+    ingredients = []
+    for i in range(len(ingredientsList)):
+        tokenized = pos_tag(word_tokenize(ingredientsList[i]))
+        name = ""
+        quant = ""
+        msmt = ""
+        prep = ""
+        desc = ""
+        
+        for word in tokenized:
+            if word[1] == 'CD':
+                quant += word[0] + " "
+            elif word[1] == 'NN' or word[1] == 'NNS':
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons']:
+                    if word[0] == 'ground':
+                        prep += word[0] + " "
+                    else:
+                        name += word[0] + " "
+                else:
+                    msmt += word[0] + " "
+            elif word[1] == 'VBD':
+                prep += word[0] + " "
+            elif word[1] == 'JJ':
+                desc += word[0] + " "
+                
+        name = name[:-1]
+        quant = quant[:-1]
+        msmt = msmt[:-1]
+        prep = prep[:-1]
+        desc = desc[:-1]
+        
+        ingredientObj = {
+            "name": f'{name}',
+            "quantity": f'{quant}',
+            "measurement": f'{msmt}',
+            "preparation": f'{prep}',
+            "descriptors": f'{desc}'
+        }
+        
+        ingredients.append(ingredientObj)
+        
+    return ingredients
 
-response = requests.get(requestUrl)
+def getRecipeSoup(recipeUrl):
+    # make web request to recipe web page
+    response = requests.get(recipeUrl)
+    # initialize beautiful soup object from web response 
+    soup = BeautifulSoup(response.text, features="lxml")
+    return soup
 
-# initialize beautiful soup object from web response 
-soup = BeautifulSoup(response.text, features="lxml")
+def getIngredientsList(recipeSoup):
+    # access & format the ingredients list
+    ingredients = recipeSoup.find_all("li", class_="checkList__line")
+    ingredientsResult = []
+    for ingredient in ingredients:
+        ingredientsResult.append(ingredient.label.text)
+    # cut off the "add more ingredients" text from the page
+    ingredientsResult = ingredientsResult[:len(ingredientsResult)-3]
+    return ingredientsResult
 
-# access & format the recipe title
-recipeTitle = soup.title.string.split('-')[0]
-
-# access & format the ingredients list
-ingredients = soup.find_all("li", class_="checkList__line")
-ingredientsResult = []
-for ingredient in ingredients:
-    ingredientsResult.append(ingredient.label.text)
+def main(recipeUrl):
+    recipeSoup = getRecipeSoup(recipeUrl)
+    recipeTitle = recipeSoup.title.string.split('-')[0]
+    ingredientsList = getIngredientsList(recipeSoup)
+    ingredients = getIngredientsObject(ingredientsList)
+    print(ingredients)
     
-# cut off the "add more ingredients" text from the page
-ingredientsResult = ingredientsResult[:len(ingredientsResult)-3]
-
-# build up lists of ingredient names, quanities, measurements
-name = []
-quantity = []
-measurement = []
-preparation = []
-descriptor = []
-
-for indx in range(len(ingredientsResult)):
-    tokenized = pos_tag(word_tokenize(ingredientsResult[indx]))
-    for word in tokenized:
-        if word[1] == 'CD':
-            quantity.append(word[0])
-        elif word[1] == 'NN':
-            if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce']:
-                name.append(word[0])
-            else:
-                measurement.append(word[0])
-        elif word[1] == 'VBD':
-            preparation.append(word[0])
-        elif word[1] == 'JJ':
-            descriptor.append(word[0])
-
-# http response code for debugging
-# print(response.status_code)
-
-# tkn = pos_tag(word_tokenize(ingredientsResult[3]))
-
-print(recipeTitle)
-
-print("\nLIST OF INGREDIENTS FOR RECIPE")
-
-for i in range(len(ingredientsResult)):
-    print(ingredientsResult[i])
-
-print("\nNAMES")
-print(name)
-
-print("\nQUANTITIES")
-print(quantity)
- 
-print("\nMEASUREMENTS")
-print(measurement)
-
-print("\nPREPERATIONS")
-print(preparation)
-
-print("\nDESCRIPTORS")
-print(descriptor)
-
-# print(tkn)
+if __name__ == '__main__':
+    recipeUrl = input('Provide a url for your recipe: ')
+    main(recipeUrl)
