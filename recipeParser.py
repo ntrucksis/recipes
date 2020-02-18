@@ -16,46 +16,54 @@ def getIngredientsObject(ingredientsList):
         desc = ""
         q = []
         print(tokenized)
-
+        
         for word in tokenized:
             if word[1] == 'CD':
                 q.append(word[0])
                 quant += word[0] + " "
-            elif word[1] == 'JJ' or word[1] == 'MD':
-                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy']:
+            elif word[1] in ['JJ', 'MD', 'VBZ']:
+                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'all-purpose', 'large', 'yellow', 'chocolate', 'vegetable']:
                     name += word[0] + " "
                 else:
-                    if word[0] in ['pinch', 'cup', 'can']:
+                    if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares']:
                         msmt+= word[0] + " "
-                    elif word[0] in ['frozen']:
+                    elif word[0] in ['frozen', '3-inch']:
                         prep += word[0] + " "
+                    elif word[0] == 'desired':
+                        pass
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices']:
-                    if word[0] == 'ground':
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages']:
+                    if word[0] in ['ground', 'pieces', 'room', 'temperature']:
                         prep += word[0] + " "
                     else:
                         name += word[0] + " "
                 else:
                     msmt += word[0] + " "
-            elif word[1] in ['VBD', 'VBN', 'VB']:
+            elif word[1] in ['VBD', 'VBN', 'VB', 'VBG']:
                 if word[0] == 'taste':
                     desc += 'to ' + word[0] + " "
+                elif word[0] == 'cut':
+                    prep += word[0] + ' into '
+                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping']:
+                    name += word[0] + " "
+                elif word[0] in ['needed']:
+                    pass
                 else:
                     prep += word[0] + " "
-
+        
         if len(q) > 1:
             msmtPart = quant[2:]
             quant = quant[:2]
-            msmt = msmtPart + msmt
-
+            msmt = msmtPart + msmt 
+            
         name = name[:-1]
         quant = quant[:-1]
         msmt = msmt[:-1]
         prep = prep[:-1]
         desc = desc[:-1]
-
+        
         ingredientObj = {
             "name": f'{name}',
             "quantity": f'{quant}',
@@ -63,9 +71,11 @@ def getIngredientsObject(ingredientsList):
             "preparation": f'{prep}',
             "descriptors": f'{desc}'
         }
-
-        ingredients.append(ingredientObj)
-
+        
+        # So that we don't add the recipe section names to the ingredients
+        if quant != "" and msmt != "": 
+            ingredients.append(ingredientObj)
+        
     return ingredients
 
 def getTools(directionsList):
