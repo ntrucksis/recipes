@@ -3,6 +3,7 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
+from lists import kitchenTools
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -13,7 +14,7 @@ def getIngredientsObject(ingredientsList):
         msmt = ""
         prep = ""
         desc = ""
-        
+
         for word in tokenized:
             if word[1] == 'CD':
                 quant += word[0] + " "
@@ -32,13 +33,13 @@ def getIngredientsObject(ingredientsList):
                     msmt += word[0] + " "
             elif word[1] == 'VBD':
                 prep += word[0] + " "
-                
+
         name = name[:-1]
         quant = quant[:-1]
         msmt = msmt[:-1]
         prep = prep[:-1]
         desc = desc[:-1]
-        
+
         ingredientObj = {
             "name": f'{name}',
             "quantity": f'{quant}',
@@ -46,15 +47,26 @@ def getIngredientsObject(ingredientsList):
             "preparation": f'{prep}',
             "descriptors": f'{desc}'
         }
-        
+
         ingredients.append(ingredientObj)
-        
+
     return ingredients
+
+def getTools(directionsList):
+    tools = []
+    for i in range(len(directionsList)):
+        tokenized = pos_tag(word_tokenize(directionsList[i]))
+        for word in tokenized:
+            if (word[1] == 'NN' or word[1] == 'NNS') and word[0] in kitchenTools and word[0] not in tools:
+                tools.append(word[0])
+    return tools
+
+
 
 def getRecipeSoup(recipeUrl):
     # make web request to recipe web page
     response = requests.get(recipeUrl)
-    # initialize beautiful soup object from web response 
+    # initialize beautiful soup object from web response
     soup = BeautifulSoup(response.text, features="lxml")
     return soup
 
@@ -68,6 +80,14 @@ def getIngredientsList(recipeSoup):
     ingredientsResult = ingredientsResult[:len(ingredientsResult)-3]
     return ingredientsResult
 
+def getDirections(recipeSoup):
+    alldirections = []
+    directions = recipeSoup.find_all("span", class_="recipe-directions__list--item")
+    for direction in directions:
+        text = direction.get_text()
+        alldirections.append(text)
+    return alldirections
+
 def main(recipeUrl):
     # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
@@ -78,6 +98,10 @@ def main(recipeUrl):
     # create ingredients objects for each ingredient
     # ingredients object has fields for name, quantity, measurement, preparation, description
     ingredients = getIngredientsObject(ingredientsList)
+    # get list of words from recipe directions
+    directionsList = getDirections(recipeSoup)
+    # get tools from directionsList
+    tools = getTools(directionsList)
 
     print(f'\nRecipe Title: {recipeTitle}\n')
 
@@ -88,7 +112,13 @@ def main(recipeUrl):
         print(f'Ingredient Preparation: {ingredient["preparation"]}')
         print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
         print('\n')
-        
+
+    print('Tools: ')
+    for tool in tools:
+        print(f'{tool}')
+    print('\n')
+
+
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
     main(recipeUrl)
