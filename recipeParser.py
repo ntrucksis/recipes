@@ -66,12 +66,26 @@ def getIngredientsList(recipeSoup):
     return ingredientsResult
 
 def main(recipeUrl):
+    # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
+    # access the recipe's title
     recipeTitle = recipeSoup.title.string.split('-')[0]
+    # form list of text where ingredients are written from the web page
     ingredientsList = getIngredientsList(recipeSoup)
+    # create ingredients objects for each ingredient
+    # ingredients object has fields for name, quantity, measurement, preparation, description
     ingredients = getIngredientsObject(ingredientsList)
-    print(ingredients)
-    
+
+    print(f'\nRecipe Title: {recipeTitle}\n')
+
+    for ingredient in ingredients:
+        print(f'Ingredient Name: {ingredient["name"]}')
+        print(f'Ingredient Quantity: {ingredient["quantity"]}')
+        print(f'Ingredient Measurement: {ingredient["measurement"]}')
+        print(f'Ingredient Preparation: {ingredient["preparation"]}')
+        print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
+        print('\n')
+        
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
     main(recipeUrl)
