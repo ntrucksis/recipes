@@ -17,8 +17,13 @@ def getIngredientsObject(ingredientsList):
         for word in tokenized:
             if word[1] == 'CD':
                 quant += word[0] + " "
+            elif word[1] == 'JJ':
+                if word[0] in ['black', 'olive', 'maple']:
+                    name += word[0] + " "
+                else:
+                    desc += word[0] + " "
             elif word[1] == 'NN' or word[1] == 'NNS':
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint']:
                     if word[0] == 'ground':
                         prep += word[0] + " "
                     else:
@@ -27,8 +32,6 @@ def getIngredientsObject(ingredientsList):
                     msmt += word[0] + " "
             elif word[1] == 'VBD':
                 prep += word[0] + " "
-            elif word[1] == 'JJ':
-                desc += word[0] + " "
                 
         name = name[:-1]
         quant = quant[:-1]
