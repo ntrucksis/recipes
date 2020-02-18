@@ -13,26 +13,42 @@ def getIngredientsObject(ingredientsList):
         msmt = ""
         prep = ""
         desc = ""
+        q = []
+        print(tokenized)
         
         for word in tokenized:
             if word[1] == 'CD':
+                q.append(word[0])
                 quant += word[0] + " "
-            elif word[1] == 'JJ':
-                if word[0] in ['black', 'olive', 'maple']:
+            elif word[1] == 'JJ' or word[1] == 'MD':
+                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy']:
                     name += word[0] + " "
                 else:
-                    desc += word[0] + " "
-            elif word[1] == 'NN' or word[1] == 'NNS':
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint']:
+                    if word[0] in ['pinch', 'cup', 'can']:
+                        msmt+= word[0] + " "
+                    elif word[0] in ['frozen']:
+                        prep += word[0] + " "
+                    else:
+                        desc += word[0] + " "
+            elif word[1] in ['NN', 'NNS', 'NNP']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices']:
                     if word[0] == 'ground':
                         prep += word[0] + " "
                     else:
                         name += word[0] + " "
                 else:
                     msmt += word[0] + " "
-            elif word[1] == 'VBD':
-                prep += word[0] + " "
-                
+            elif word[1] in ['VBD', 'VBN', 'VB']:
+                if word[0] == 'taste':
+                    desc += 'to ' + word[0] + " "
+                else:
+                    prep += word[0] + " "
+        
+        if len(q) > 1:
+            msmtPart = quant[2:]
+            quant = quant[:2]
+            msmt = msmtPart + msmt 
+            
         name = name[:-1]
         quant = quant[:-1]
         msmt = msmt[:-1]
