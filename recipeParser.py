@@ -54,9 +54,10 @@ def getIngredientsObject(ingredientsList):
                     prep += word[0] + " "
         
         if len(q) > 1:
-            msmtPart = quant[2:]
-            quant = quant[:2]
-            msmt = msmtPart + msmt 
+            if q[1] not in ['1/4', '1/2', '3/4', '1/3', '2/3']:
+                msmtPart = quant[2:]
+                quant = quant[:2]
+                msmt = msmtPart + msmt 
             
         name = name[:-1]
         quant = quant[:-1]
@@ -113,7 +114,30 @@ def getDirections(recipeSoup):
         text = direction.get_text()
         alldirections.append(text)
     return alldirections
-
+    
+def getMethods(directionsList):
+    methods = []
+    for i in range(len(directionsList)):
+        # tokenized = pos_tag(word_tokenize(directionsList[i]))
+        steps = directionsList[i].split('. ')
+        for step in steps:
+            tokenized = pos_tag(word_tokenize(step))
+            for word in tokenized:
+                if word[0] in ['boil', 'heat']:
+                    if word[0] not in methods:
+                        methods.append(word[0])
+                else:
+                    pass
+    return methods
+    
+def getSteps(directionsList):
+    steps = []
+    for i in range(len(directionsList)):
+        sentences = directionsList[i].split('. ')
+        for sentence in sentences:
+            steps.append(sentence)
+    return steps
+    
 def main(recipeUrl):
     # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
@@ -129,7 +153,9 @@ def main(recipeUrl):
     # get tools from directionsList
     tools = getTools(directionsList)
     # get cooking methods from direcions list
-    # methods = getMethods(directionsList)
+    methods = getMethods(directionsList)
+    # get steps from list of directions
+    steps = getSteps(directionsList)
 
     print(f'\nRecipe Title: {recipeTitle}\n')
 
@@ -145,6 +171,15 @@ def main(recipeUrl):
     for tool in tools:
         print(f'{tool}')
     print('\n')
+    
+    print('Primary Methods: \n')
+    for method in methods:
+        print(f'Method: {method}')
+    print('\n')
+    
+    print('Steps to Complete the Recipe: \n')
+    for i in range(len(steps)):
+        print(f'Step {i}: {steps[i]}')
 
 
 if __name__ == '__main__':
