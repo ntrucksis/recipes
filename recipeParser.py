@@ -34,7 +34,7 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves']:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature']:
                         prep += word[0] + " "
                     else:
@@ -128,6 +128,8 @@ def main(recipeUrl):
     directionsList = getDirections(recipeSoup)
     # get tools from directionsList
     tools = getTools(directionsList)
+    # get cooking methods from direcions list
+    # methods = getMethods(directionsList)
 
     print(f'\nRecipe Title: {recipeTitle}\n')
 
