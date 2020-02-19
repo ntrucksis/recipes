@@ -15,7 +15,7 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        # print(tokenized)
+        print(tokenized)
         
         for word in tokenized:
             if word[1] == 'CD':
@@ -35,7 +35,7 @@ def getIngredientsObject(ingredientsList):
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
                 if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves']:
-                    if word[0] in ['ground', 'pieces', 'room', 'temperature']:
+                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks']:
                         prep += word[0] + " "
                     else:
                         name += word[0] + " "
