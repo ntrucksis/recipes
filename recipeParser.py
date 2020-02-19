@@ -15,13 +15,13 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        print(tokenized)
+        # print(tokenized)
         
         for word in tokenized:
             if word[1] == 'CD':
                 q.append(word[0])
                 quant += word[0] + " "
-            elif word[1] in ['JJ', 'MD', 'VBZ']:
+            elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
                 if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'all-purpose', 'large', 'yellow', 'chocolate', 'vegetable']:
                     name += word[0] + " "
                 else:
@@ -123,7 +123,7 @@ def getMethods(directionsList):
         for step in steps:
             tokenized = pos_tag(word_tokenize(step))
             for word in tokenized:
-                if word[0] in ['boil', 'heat']:
+                if word[0] in ['boil', 'heat', 'Bake']:
                     if word[0] not in methods:
                         methods.append(word[0])
                 else:
@@ -178,8 +178,10 @@ def main(recipeUrl):
     print('\n')
     
     print('Steps to Complete the Recipe: \n')
-    for i in range(len(steps)):
-        print(f'Step {i}: {steps[i]}')
+    indx = 1
+    for i in range(len(steps) - 1):
+        print(f'Step {indx}: {steps[i]}')
+        indx += 1
 
 
 if __name__ == '__main__':
