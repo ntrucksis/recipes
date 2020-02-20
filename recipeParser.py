@@ -15,7 +15,7 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        print(tokenized)
+        # print(tokenized)
         
         for word in tokenized:
             if word[1] == 'CD':
@@ -89,6 +89,7 @@ def getTools(directionsList):
         for word in tokenized:
             if (word[1] == 'NN' or word[1] == 'NNS') and word[0] in kitchenTools and word[0] not in toolsBuilder:
                 toolsBuilder += word[0] + ', '
+    toolsBuilder = toolsBuilder[:-2]
     toolsObj = {
         "tools": f'{toolsBuilder}'
     }
@@ -140,7 +141,7 @@ def getSecondaryMethods(directionsList):
         directionLower = directionsList[i].lower()
         tokenized = pos_tag(word_tokenize(directionLower))
         for word in tokenized:
-            if word[0] in ['mix', 'stir', 'shake', 'pour']:
+            if word[0] in ['mix', 'stir', 'shake', 'pour', 'ladle']:
                 if word[0] not in secMethodsBuilder:
                     secMethodsBuilder += word[0] + ", "
     secMethodsBuilder = secMethodsBuilder[:-2]
@@ -175,6 +176,19 @@ def main(recipeUrl):
     secondaryMethods = getSecondaryMethods(directionsList)
     # get steps from list of directions
     steps = getSteps(directionsList)
+    
+    # initialize dicitonary that will hold all individual ingredient dictionaries
+    ingredDict = {}
+    
+    # assign number to each ingredient dictionary and add them to wrapper dictionary
+    for i in range(len(ingredients)):
+        ingredDict[f'{i}'] = ingredients[i]
+    
+    # create large dictionary that holds all ingredients, tools, primary and secondary cooking methdos
+    recipeObj = {**ingredDict , **tools , **primaryMethods , **secondaryMethods}
+    
+    print(recipeObj)
+    # print(recipeObj["primaryMethods"])
 
     print(f'\nRecipe Title: {recipeTitle}\n')
 
