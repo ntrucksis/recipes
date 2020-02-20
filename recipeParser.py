@@ -22,7 +22,7 @@ def getIngredientsObject(ingredientsList):
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'all-purpose', 'large', 'yellow', 'chocolate', 'vegetable']:
+                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'large', 'yellow', 'chocolate', 'vegetable']:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares']:
@@ -156,6 +156,9 @@ def getSteps(directionsList):
         steps.append(directionsList[i])
     return steps
     
+def buildRepresentation(recipeObj, steps):
+    pass
+    
 def main(recipeUrl):
     # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
@@ -176,16 +179,16 @@ def main(recipeUrl):
     secondaryMethods = getSecondaryMethods(directionsList)
     # get steps from list of directions
     steps = getSteps(directionsList)
-    
     # initialize dicitonary that will hold all individual ingredient dictionaries
     ingredDict = {}
-    
     # assign number to each ingredient dictionary and add them to wrapper dictionary
     for i in range(len(ingredients)):
         ingredDict[f'{i}'] = ingredients[i]
-    
     # create large dictionary that holds all ingredients, tools, primary and secondary cooking methdos
     recipeObj = {**ingredDict , **tools , **primaryMethods , **secondaryMethods}
+    
+    # build our representation of the steps using the parsed info
+    # stepsRep = buildRepresentation(recipeObj, steps)
     
     print(recipeObj)
     # print(recipeObj["primaryMethods"])
