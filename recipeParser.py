@@ -34,13 +34,16 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying']:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks']:
                         prep += word[0] + " "
                     else:
                         name += word[0] + " "
                 else:
-                    msmt += word[0] + " "
+                    if word[0] in ['frying']:
+                        desc += 'for ' + word[0] + ' '
+                    else:
+                        msmt += word[0] + " "
             elif word[1] in ['VBD', 'VBN', 'VB', 'VBG']:
                 if word[0] == 'taste':
                     desc += 'to ' + word[0] + " "
@@ -80,15 +83,16 @@ def getIngredientsObject(ingredientsList):
     return ingredients
 
 def getTools(directionsList):
-    tools = []
+    toolsBuilder = ""
     for i in range(len(directionsList)):
         tokenized = pos_tag(word_tokenize(directionsList[i]))
         for word in tokenized:
-            if (word[1] == 'NN' or word[1] == 'NNS') and word[0] in kitchenTools and word[0] not in tools:
-                tools.append(word[0])
-    return tools
-
-
+            if (word[1] == 'NN' or word[1] == 'NNS') and word[0] in kitchenTools and word[0] not in toolsBuilder:
+                toolsBuilder += word[0] + ', '
+    toolsObj = {
+        "tools": f'{toolsBuilder}'
+    }
+    return toolsObj
 
 def getRecipeSoup(recipeUrl):
     # make web request to recipe web page
@@ -115,27 +119,40 @@ def getDirections(recipeSoup):
         alldirections.append(text)
     return alldirections
     
-def getMethods(directionsList):
-    methods = []
+def getPrimaryMethods(directionsList):
+    primaryMethodsBuilder = ""
     for i in range(len(directionsList)):
-        # tokenized = pos_tag(word_tokenize(directionsList[i]))
-        steps = directionsList[i].split('. ')
-        for step in steps:
-            tokenized = pos_tag(word_tokenize(step))
-            for word in tokenized:
-                if word[0] in ['boil', 'heat', 'Bake']:
-                    if word[0] not in methods:
-                        methods.append(word[0])
-                else:
-                    pass
-    return methods
+        directionLower = directionsList[i].lower()
+        tokenized = pos_tag(word_tokenize(directionLower))
+        for word in tokenized:
+            if word[0] in ['bake', 'heat', 'cook', 'boil']:
+                if word[0] not in primaryMethodsBuilder:
+                    primaryMethodsBuilder += word[0] + ", "
+    primaryMethodsBuilder = primaryMethodsBuilder[:-2]
+    primaryMethodsObj = {
+        "primaryMethods": f'{primaryMethodsBuilder}'
+    }
+    return primaryMethodsObj
+    
+def getSecondaryMethods(directionsList):
+    secMethodsBuilder = ""
+    for i in range(len(directionsList)):
+        directionLower = directionsList[i].lower()
+        tokenized = pos_tag(word_tokenize(directionLower))
+        for word in tokenized:
+            if word[0] in ['mix', 'stir', 'shake', 'pour']:
+                if word[0] not in secMethodsBuilder:
+                    secMethodsBuilder += word[0] + ", "
+    secMethodsBuilder = secMethodsBuilder[:-2]
+    secondaryMethodsObj = {
+        "secondaryMethods": f'{secMethodsBuilder}'
+    }
+    return secondaryMethodsObj
     
 def getSteps(directionsList):
     steps = []
     for i in range(len(directionsList)):
-        sentences = directionsList[i].split('. ')
-        for sentence in sentences:
-            steps.append(sentence)
+        steps.append(directionsList[i])
     return steps
     
 def main(recipeUrl):
@@ -152,8 +169,10 @@ def main(recipeUrl):
     directionsList = getDirections(recipeSoup)
     # get tools from directionsList
     tools = getTools(directionsList)
-    # get cooking methods from direcions list
-    methods = getMethods(directionsList)
+    # get primary cooking methods from direcions list
+    primaryMethods = getPrimaryMethods(directionsList)
+    # get secondary cooking methods from directions list
+    secondaryMethods = getSecondaryMethods(directionsList)
     # get steps from list of directions
     steps = getSteps(directionsList)
 
@@ -167,15 +186,11 @@ def main(recipeUrl):
         print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
         print('\n')
 
-    print('Tools: ')
-    for tool in tools:
-        print(f'{tool}')
-    print('\n')
+    print(f'Tools for Recipe: {tools["tools"]}\n')
     
-    print('Primary Methods: \n')
-    for method in methods:
-        print(f'Method: {method}')
-    print('\n')
+    print(f'Primary Cooking Methods: {primaryMethods["primaryMethods"]}\n')
+    
+    print(f'Secondary Cooking Methods: {secondaryMethods["secondaryMethods"]}\n')
     
     print('Steps to Complete the Recipe: \n')
     indx = 1
