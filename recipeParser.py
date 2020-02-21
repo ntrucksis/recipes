@@ -22,21 +22,27 @@ def getIngredientsObject(ingredientsList):
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'large', 'yellow', 'chocolate', 'vegetable']:
+                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'large', 'yellow', 'chocolate', 'vegetable', 'lime']:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares']:
                         msmt+= word[0] + " "
                     elif word[0] in ['frozen', '3-inch']:
                         prep += word[0] + " "
-                    elif word[0] == 'desired':
+                    elif word[0] in ['nonstick']:
+                        desc += word[0] + " "
+                    elif word[0] in ['desired', 'such']:
                         pass
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid']:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks']:
                         prep += word[0] + " "
+                    elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®']:
+                        pass
+                    elif word[0] in ['semisweet']:
+                        desc += word[0] + " "
                     else:
                         name += word[0] + " "
                 else:
@@ -44,21 +50,23 @@ def getIngredientsObject(ingredientsList):
                         desc += 'for ' + word[0] + ' '
                     else:
                         msmt += word[0] + " "
-            elif word[1] in ['VBD', 'VBN', 'VB', 'VBG']:
+            elif word[1] in ['VBD', 'VBN', 'VB', 'VBG', 'VBP']:
                 if word[0] == 'taste':
                     desc += 'to ' + word[0] + " "
                 elif word[0] == 'cut':
                     prep += word[0] + ' into '
-                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping']:
+                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping', 'taco', 'seasoning']:
                     name += word[0] + " "
-                elif word[0] in ['needed']:
+                elif word[0] in ['needed', 'desired']:
                     pass
                 else:
                     prep += word[0] + " "
+            elif word[1] == 'IN':
+                pass
         
         if len(q) > 1:
             if q[1] not in ['1/4', '1/2', '3/4', '1/3', '2/3']:
-                msmtPart = quant[2:]
+                msmtPart = q[1] + " "
                 quant = quant[:2]
                 msmt = msmtPart + msmt 
             
@@ -76,6 +84,8 @@ def getIngredientsObject(ingredientsList):
             "descriptors": f'{desc}'
         }
         
+        if 'cooking spray' in name:
+            ingredients.append(ingredientObj)
         # So that we don't add the recipe section names to the ingredients
         if quant != "": 
             ingredients.append(ingredientObj)
@@ -163,7 +173,7 @@ def main(recipeUrl):
     # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
     # access the recipe's title
-    recipeTitle = recipeSoup.title.string.split('-')[0]
+    recipeTitle = recipeSoup.title.string.split('- ')[0]
     # form list of text where ingredients are written from the web page
     ingredientsList = getIngredientsList(recipeSoup)
     # create ingredients objects for each ingredient
@@ -192,7 +202,8 @@ def main(recipeUrl):
     
     print(recipeObj)
     # print(recipeObj["primaryMethods"])
-
+    # print(recipeObj["0"]["name"])
+    
     print(f'\nRecipe Title: {recipeTitle}\n')
 
     for ingredient in ingredients:
