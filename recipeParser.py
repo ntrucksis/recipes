@@ -3,7 +3,7 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
-from lists import kitchenTools
+from lists import kitchenTools, kitchenTools_two
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -16,7 +16,7 @@ def getIngredientsObject(ingredientsList):
         desc = ""
         q = []
         # print(tokenized)
-        
+
         for word in tokenized:
             if word[1] == 'CD':
                 q.append(word[0])
@@ -63,19 +63,19 @@ def getIngredientsObject(ingredientsList):
                     prep += word[0] + " "
             elif word[1] == 'IN':
                 pass
-        
+
         if len(q) > 1:
             if q[1] not in ['1/4', '1/2', '3/4', '1/3', '2/3']:
                 msmtPart = q[1] + " "
                 quant = quant[:2]
-                msmt = msmtPart + msmt 
-            
+                msmt = msmtPart + msmt
+
         name = name[:-1]
         quant = quant[:-1]
         msmt = msmt[:-1]
         prep = prep[:-1]
         desc = desc[:-1]
-        
+
         ingredientObj = {
             "name": f'{name}',
             "quantity": f'{quant}',
@@ -83,22 +83,28 @@ def getIngredientsObject(ingredientsList):
             "preparation": f'{prep}',
             "descriptors": f'{desc}'
         }
-        
+
         if 'cooking spray' in name:
             ingredients.append(ingredientObj)
         # So that we don't add the recipe section names to the ingredients
-        if quant != "": 
+        if quant != "":
             ingredients.append(ingredientObj)
-        
+
     return ingredients
 
 def getTools(directionsList):
     toolsBuilder = ""
     for i in range(len(directionsList)):
         tokenized = pos_tag(word_tokenize(directionsList[i]))
-        for word in tokenized:
-            if (word[1] == 'NN' or word[1] == 'NNS') and word[0] in kitchenTools and word[0] not in toolsBuilder:
-                toolsBuilder += word[0] + ', '
+        for t in range(len(tokenized)):
+            if (tokenized[t][1] == 'NN' or tokenized[t][1] == 'NNS') and tokenized[t][0] not in toolsBuilder:
+                #if single word
+                if tokenized[t][0] in kitchenTools:
+                    toolsBuilder += tokenized[t][0] + ', '
+                #if two words
+                if t < len(tokenized) - 1:
+                    if tokenized[t][0] in kitchenTools_two and tokenized[t+1][0] in kitchenTools_two[tokenized[t][0]]:
+                        toolsBuilder += tokenized[t][0] + ' ' + tokenized[t+1][0] + ', '
     toolsBuilder = toolsBuilder[:-2]
     toolsObj = {
         "tools": f'{toolsBuilder}'
@@ -129,7 +135,7 @@ def getDirections(recipeSoup):
         text = direction.get_text()
         alldirections.append(text)
     return alldirections
-    
+
 def getPrimaryMethods(directionsList):
     primaryMethodsBuilder = ""
     for i in range(len(directionsList)):
@@ -144,7 +150,7 @@ def getPrimaryMethods(directionsList):
         "primaryMethods": f'{primaryMethodsBuilder}'
     }
     return primaryMethodsObj
-    
+
 def getSecondaryMethods(directionsList):
     secMethodsBuilder = ""
     for i in range(len(directionsList)):
@@ -159,16 +165,16 @@ def getSecondaryMethods(directionsList):
         "secondaryMethods": f'{secMethodsBuilder}'
     }
     return secondaryMethodsObj
-    
+
 def getSteps(directionsList):
     steps = []
     for i in range(len(directionsList)):
         steps.append(directionsList[i])
     return steps
-    
+
 def buildRepresentation(recipeObj, steps):
     pass
-    
+
 def main(recipeUrl):
     # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
@@ -196,14 +202,14 @@ def main(recipeUrl):
         ingredDict[f'{i}'] = ingredients[i]
     # create large dictionary that holds all ingredients, tools, primary and secondary cooking methdos
     recipeObj = {**ingredDict , **tools , **primaryMethods , **secondaryMethods}
-    
+
     # build our representation of the steps using the parsed info
     # stepsRep = buildRepresentation(recipeObj, steps)
-    
+
     print(recipeObj)
     # print(recipeObj["primaryMethods"])
     # print(recipeObj["0"]["name"])
-    
+
     print(f'\nRecipe Title: {recipeTitle}\n')
 
     for ingredient in ingredients:
@@ -215,11 +221,11 @@ def main(recipeUrl):
         print('\n')
 
     print(f'Tools for Recipe: {tools["tools"]}\n')
-    
+
     print(f'Primary Cooking Methods: {primaryMethods["primaryMethods"]}\n')
-    
+
     print(f'Secondary Cooking Methods: {secondaryMethods["secondaryMethods"]}\n')
-    
+
     print('Steps to Complete the Recipe: \n')
     indx = 1
     for i in range(len(steps) - 1):
