@@ -15,33 +15,33 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        # print(tokenized)
+        print(tokenized)
 
         for word in tokenized:
             if word[1] == 'CD':
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'large', 'yellow', 'chocolate', 'vegetable', 'lime']:
+                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'large', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese']:
                     name += word[0] + " "
                 else:
-                    if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares']:
+                    if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares', 'teaspoon']:
                         msmt+= word[0] + " "
-                    elif word[0] in ['frozen', '3-inch']:
+                    elif word[0] in ['frozen', '3-inch', 'finely']:
                         prep += word[0] + " "
                     elif word[0] in ['nonstick']:
                         desc += word[0] + " "
-                    elif word[0] in ['desired', 'such']:
+                    elif word[0] in ['desired', 'such', 'only']:
                         pass
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid']:
-                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head']:
+                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets']:
                         prep += word[0] + " "
-                    elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®']:
+                    elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®', 'Campbell\'s®']:
                         pass
-                    elif word[0] in ['semisweet']:
+                    elif word[0] in ['semisweet', 'medium']:
                         desc += word[0] + " "
                     else:
                         name += word[0] + " "
@@ -157,7 +157,7 @@ def getSecondaryMethods(directionsList):
         directionLower = directionsList[i].lower()
         tokenized = pos_tag(word_tokenize(directionLower))
         for word in tokenized:
-            if word[0] in ['mix', 'stir', 'shake', 'pour', 'ladle']:
+            if word[0] in ['mix', 'stir', 'shake', 'pour', 'ladle', 'toss', 'drain', 'top', 'crumble', 'spray', 'combine', 'season']:
                 if word[0] not in secMethodsBuilder:
                     secMethodsBuilder += word[0] + ", "
     secMethodsBuilder = secMethodsBuilder[:-2]
@@ -206,7 +206,7 @@ def main(recipeUrl):
     # build our representation of the steps using the parsed info
     # stepsRep = buildRepresentation(recipeObj, steps)
 
-    print(recipeObj)
+    # print(recipeObj)
     # print(recipeObj["primaryMethods"])
     # print(recipeObj["0"]["name"])
 
