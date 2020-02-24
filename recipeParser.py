@@ -4,6 +4,7 @@ import requests
 from nltk import pos_tag, word_tokenize
 import sys
 from lists import kitchenTools, kitchenTools_two
+from healthy import makeHealthy
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -206,6 +207,7 @@ def main(recipeUrl):
     # build our representation of the steps using the parsed info
     # stepsRep = buildRepresentation(recipeObj, steps)
 
+
     print(recipeObj)
     # print(recipeObj["primaryMethods"])
     # print(recipeObj["0"]["name"])
@@ -232,6 +234,10 @@ def main(recipeUrl):
         print(f'Step {indx}: {steps[i]}')
         indx += 1
 
+    choice = input('Make healthy? (y/n): ')
+    if choice == 'y':
+        makeHealthy(ingredients, recipeTitle)
+        print('\n')
 
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
