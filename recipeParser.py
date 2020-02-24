@@ -116,7 +116,7 @@ def getRecipeSoup(recipeUrl):
     # make web request to recipe web page
     response = requests.get(recipeUrl)
     # initialize beautiful soup object from web response
-    soup = BeautifulSoup(response.text, features="lxml")
+    soup = BeautifulSoup(response.text, features="html.parser") # changed to html.parser so we dont have to install a new one
     return soup
 
 def getIngredientsList(recipeSoup):
