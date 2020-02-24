@@ -1,12 +1,8 @@
 # look at recipes similar to current one and find ways to transform them
 # Mainly for transforming cuisines
-
+from collections import Counter
 import requests
 from bs4 import BeautifulSoup # pip install beautifulsoup4
-
-from collections import Counter
-
-
 
 class Backtracker:
 
