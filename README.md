@@ -1,13 +1,18 @@
 # Recipes
 
-To run the project, please install the following python libraries:
+To run the project, please install the following python packages with the command:
 
- - Beautiful Soup - `pip install beautifulsoup4`
- - NLTK - `pip install nltk`
+- $ `pip install -r requirements.txt`
+
+Optionally, you can create a virtual environment to hold all the required packages:
+
+- $ `python -m venv env`
+- $ `source env/bin/activate`
+- $ `pip install -r requirements.txt`
 
 # HTML Parser
 
-This project runs on the default python parser `lxml`.  Functionality is not guaranteed with other html parsers.
+This project runs on the default python parser `html`.  Functionality is not guaranteed with other html parsers.
 
 ## Running the Project
 
