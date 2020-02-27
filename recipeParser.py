@@ -23,7 +23,7 @@ def getIngredientsObject(ingredientsList):
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'green',  'red', 'white', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'large', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese']:
+                if word[0] in ['black', 'olive', 'maple', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon']:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares', 'teaspoon']:
@@ -37,7 +37,7 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch']:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets']:
                         prep += word[0] + " "
                     elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®', 'Campbell\'s®']:
@@ -66,10 +66,15 @@ def getIngredientsObject(ingredientsList):
                 pass
 
         if len(q) > 1:
-            if q[1] not in ['1/4', '1/2', '3/4', '1/3', '2/3']:
-                msmtPart = q[1] + " "
-                quant = quant[:2]
-                msmt = msmtPart + msmt
+            tmp = q[1:]
+            print(tmp)
+            for element in tmp:
+                if element not in ['1/4', '1/2', '3/4', '1/3', '2/3']:
+                    msmtPart = element + " "
+                    quant = quant[:2]
+                    msmt = msmtPart + msmt
+                else:
+                    pass
 
         name = name[:-1]
         quant = quant[:-1]
@@ -116,7 +121,7 @@ def getRecipeSoup(recipeUrl):
     # make web request to recipe web page
     response = requests.get(recipeUrl)
     # initialize beautiful soup object from web response
-    soup = BeautifulSoup(response.text, features="lxml")
+    soup = BeautifulSoup(response.text, features="html.parser") # changed to html.parser so we dont have to install a new one
     return soup
 
 def getIngredientsList(recipeSoup):
