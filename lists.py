@@ -23,5 +23,6 @@ healthList = {
     "cream": [1, "evaporated skim milk", 1],
     "cream cheese": [1, "low-fat cottage cheese", 1], # pureed
     "eggs": [1, "egg whites", 2], # 2 egg whites
-    "flour": [1, "whole wheat flour", .5] # half
+    "flour": [1, "whole wheat flour", .5], # half
+    "beef": [1, "chicken", 1]
 }
