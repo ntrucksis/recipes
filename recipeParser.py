@@ -240,7 +240,7 @@ def main(recipeUrl):
 
     choice = input('Make healthy? (y/n): ')
     if choice == 'y':
-        makeHealthy(ingredients, recipeTitle)
+        makeHealthy(ingredients, steps, recipeTitle)
         print('\n')
 
 if __name__ == '__main__':

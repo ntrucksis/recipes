@@ -15,17 +15,36 @@ kitchenTools_two = {
 
 # healthy food substitutions
 # key is the unhealthy item
-# value: number of substitutions, sub name, quantity amount
+# value: number of substitutions, sub name, quantity
 # ex: "butter": [2, "almond butter", .5, "coconut oil", .5] --> 1/2 cup almond butter & 1/2 cup coco oil per cup butter
 healthList = {
     "bread crumbs": [1, "rolled oats", 1],
-    "butter": [2, "almond butter", .5, "coconut oil", .5], # add measurements and oil, also cooking spray
+    "butter": [2, "almond butter", .5, "coconut oil", .5], # also cooking spray
     "cream": [1, "evaporated skim milk", 1],
     "cream cheese": [1, "low-fat cottage cheese", 1], # pureed
-    "eggs": [1, "egg whites", 2], # 2 egg whites
-    "flour": [1, "whole wheat flour", .5], # half
-    "beef": [1, "chicken", 1]
+    "eggs": [1, "egg whites", 2],
+    "egg": [1, "egg white", 2],
+    "flour": [1, "whole wheat flour", .5],
+    "beef": [1, "chicken", 1],
+    "milk": [1, "skim milk", 1],
+    "sour cream": [1, "greek yogurt", 1],
+    "couscous": [1, "quinoa", 1],
+    "flour tortillas": [1, "corn tortillas", 1],
+    "oatmeal": [1, "quinoa", 1],
+    "croutons": [2, "almonds", .5, "walnuts", .5],
+    "sugar": [1, "agave", .75],
+    "chocolate chips": [1, "cacao nibs", 1],
+    "soy sauce": [1, "low-sodium soy sauce", 1],
+    "white rice": [1, "brown rice", 1],
+    "bread": [1, "whole wheat bread", 1],
+    "vegetable oil": [1, "olive oil", 1],
+    "shortening": [1, "fat free margarine", 1],
+    "mayonnaise": [2, "greek yogurt", .5, "mayonnaise", .5],
+    "bacon": [1, "canadian bacon", 1],
+    "pizza crust": [1, "cauliflower crust", 1],
 }
+
+
 
 # top ingedients for each cuisine so we know how to transform and classify recipes
 cuisines = {
@@ -53,10 +72,10 @@ cuisines = {
 
 
 # master list of types of ingredients so we know how to replace them
-meat = ["lamb", "chicken", "steak", "fish", "tuna", "salmon", "ribeye", 
-"rib-eye", "flank", "bacon", "pork", "beef", "duck", "turkey", "ham", 
-"mutton", "sausage", "poultry", "venison", "red meat", "veal", "white meat", 
-"goat", "anchovy", "hot dog", "salami", "meatball", "quail", "breast", "chicken breast", 
+meat = ["lamb", "chicken", "steak", "fish", "tuna", "salmon", "ribeye",
+"rib-eye", "flank", "bacon", "pork", "beef", "duck", "turkey", "ham",
+"mutton", "sausage", "poultry", "venison", "red meat", "veal", "white meat",
+"goat", "anchovy", "hot dog", "salami", "meatball", "quail", "breast", "chicken breast",
 "chicken thigh", "chicken wing", "liver", "andouille sausage"]
 
 seafood = ["oyster", "clam", "mussel", "fish", "eel", "salmon", "trout", "shrimp",
@@ -65,21 +84,21 @@ seafood = ["oyster", "clam", "mussel", "fish", "eel", "salmon", "trout", "shrimp
    "monkfish", "abalone", "skate", "mackerel"]
 
 pasta = ["spaghetti", "fettuccine", "lunguine", "penne", "rigatoni", "orecchiette",
- "farfalle", "pappardelle", "fusilli", "rigatoni", "orzo", "tortellini", "ziti", 
+ "farfalle", "pappardelle", "fusilli", "rigatoni", "orzo", "tortellini", "ziti",
  "ravioli", "macaroni", "cappelletti", "lasagne", "gnocci", "rotini"]
 
-grains = ["rice", "barley", "quinoa", "oat", "millet", "maize", 
+grains = ["rice", "barley", "quinoa", "oat", "millet", "maize",
 "rye", "whole grain", "wild rice", "brown rice", "white rice"]
 
 sauce = ["alfredo", "marinara", "soy sauce", "mushroom sauce", "steak sauce",
  "barbecue", "bbq", "sauce", "salsa", "hollandaise", "mayonnaise", "cocktail sauce",
   "hot sauce", "peanut sauce", "bechamel sauce", "bechamel", "sweet and sour", "oyster sauce",
-  "tomato sauce", "hoisin", "hoisin sauce", "pesto", "pesto sauce", "tartar", "chimichurri", 
+  "tomato sauce", "hoisin", "hoisin sauce", "pesto", "pesto sauce", "tartar", "chimichurri",
   "creole sauce", "worcestershire", "mirin", "katchup", "relish", "hoisin sauce", "fish sauce"]
 
-seasoning = ["pepper", "salt", "cinnamon", "chili powder", "ground cinnamon", 
-"chili flakes", "cumin", "ginger", "ground ginger", "nutmeg", "paprika", 
-"oregano", "dried oregano", "bay leaf", "bay leaves", "cayenne", 
+seasoning = ["pepper", "salt", "cinnamon", "chili powder", "ground cinnamon",
+"chili flakes", "cumin", "ginger", "ground ginger", "nutmeg", "paprika",
+"oregano", "dried oregano", "bay leaf", "bay leaves", "cayenne",
 "cayenne pepper", "paprika", "tarragon", "creole seasoning", "cajun seasoning"]
 
 spices = ["adobo", "chili powder", "masala", "five-spice powder", "curry powder",
@@ -88,7 +107,7 @@ spices = ["adobo", "chili powder", "masala", "five-spice powder", "curry powder"
  "fennel", "clove", "garlic", "black pepper", "coriander", "star anise", "anise", "mustard seed", "garam masala",
   "chili powder", "onion powder"]
 
-herbs = ["basil", "parsley", "rosemary", "thyme", "oregano", "sage", "chives", "mint", "dill", "lavender", "tarragon", "majoram", "coriander", 
+herbs = ["basil", "parsley", "rosemary", "thyme", "oregano", "sage", "chives", "mint", "dill", "lavender", "tarragon", "majoram", "coriander",
 "fennel", "chervil", "lemongrass", "cilantro", "pepperming", "chamomile", "anise", "arugula"]
 
 fats = ["olive oil", "almond butter", "butter", "unsalted butter", "e.v. olive oil", "avocado oil",
@@ -108,7 +127,7 @@ vegetables = ["asparagus", "lettuce", "celery", "brussels sprout", "broccoli", "
 "chesnut", "bok choy", "dill", "wasabi", "zucchini", "leek", "shallot", "beets", "beansprouts"]
 
 fruits = ["berry", "apple", "papaya", "blueberry", "raspberry", "pear", "pineapple", "mango",
- "apricot", "avocado", "banana", "cherry", "lemon", "grapefruit", "orange", "grape", "pomegranate", 
+ "apricot", "avocado", "banana", "cherry", "lemon", "grapefruit", "orange", "grape", "pomegranate",
  "tangerine", "plum", "tomato", "watermelon", "clementine", "strawberry", "kiwi", "elderberry", "cranberry",
   "blackberry", "lime"]
 
