@@ -126,10 +126,18 @@ def getRecipeSoup(recipeUrl):
 
 def getIngredientsList(recipeSoup):
     # access & format the ingredients list
+    flag = 0
     ingredients = recipeSoup.find_all("li", class_="checkList__line")
+    if not ingredients:
+        flag = 1
+        ingredients = recipeSoup.find_all("span", class_="ingredients-item-name")
     ingredientsResult = []
-    for ingredient in ingredients:
-        ingredientsResult.append(ingredient.label.text)
+    if not flag:
+        for ingredient in ingredients:
+            ingredientsResult.append(ingredient.label.text)
+    else:
+        for ingredient in ingredients:
+            ingredientsResult.append(ingredient.get_text())
     # cut off the "add more ingredients" text from the page
     ingredientsResult = ingredientsResult[:len(ingredientsResult)-3]
     return ingredientsResult
@@ -137,6 +145,8 @@ def getIngredientsList(recipeSoup):
 def getDirections(recipeSoup):
     alldirections = []
     directions = recipeSoup.find_all("span", class_="recipe-directions__list--item")
+    if not directions:
+        directions = recipeSoup.find_all("div", class_="section-body")
     for direction in directions:
         text = direction.get_text()
         alldirections.append(text)
