@@ -2,7 +2,7 @@
 
 kitchenTools = ['barbecue', 'colander', 'grill','baster', 'beanpot',
 'brush','blender','basket', 'bowl','knife','pan', 'baking', 'sheet', 'colander', 'timer', 'poacher', 'grater', 'griddle', 'mixer', 'juicer', 'microwave', 'oven', 'peeler',
-'pot', 'strainer', 'steamer', 'skillet', 'scissors', 'sieve', 'skewer', 'tongs', 'whisk',
+'pot', 'saucepan', 'strainer', 'steamer', 'skillet', 'scissors', 'sieve', 'skewer', 'tongs', 'whisk',
 'wok', 'zester']
 
 # kitchen tools with two words
