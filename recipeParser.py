@@ -5,6 +5,8 @@ from nltk import pos_tag, word_tokenize
 import sys
 from lists import kitchenTools, kitchenTools_two
 from healthy import makeHealthy
+import sizetransform
+import makevegetarian
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -248,11 +250,21 @@ def main(recipeUrl):
     for i in range(len(steps) - 1):
         print(f'Step {indx}: {steps[i]}')
         indx += 1
+    
+    vegetarianingredients = []
 
     choice = input('Make healthy? (y/n): ')
     if choice == 'y':
         makeHealthy(ingredients, steps, recipeTitle)
         print('\n')
+    
+    #choice = input('Make vegetarian? (y/n): ')
+    #if choice == 'y':
+    #      if (vegetarianingredients):
+    #        searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+    #        vegetarianingredients = getVegIngreds(searchlist)
+    #      vegrecipeobject = changeToVeg(recipeObj, vegetarianingredients, vegsubs)
+          
 
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
