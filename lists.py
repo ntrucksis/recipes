@@ -1,16 +1,20 @@
 # kitchen tools list
 
 kitchenTools = ['barbecue', 'colander', 'grill','baster', 'beanpot',
-'brush','blender','basket', 'bowl','knife','pan', 'baking', 'sheet', 'colander', 'timer', 'poacher', 'grater', 'griddle', 'mixer', 'juicer', 'microwave', 'oven', 'peeler',
+'brush','blender','basket', 'bowl','knife','pan', 'baking', 'sheet', 'colander', 'timer', 'poacher', 'grater', 'griddle', 'grinder', 'mixer', 'juicer', 'microwave', 'oven', 'peeler',
 'pot', 'saucepan', 'strainer', 'steamer', 'skillet', 'scissors', 'sieve', 'skewer', 'tongs', 'whisk',
-'wok', 'zester']
+'wok', 'zester', 'plate', 'peeler', 'mortar', 'pestle', 'scale', 'timer', 'gloves', 'sieve', 'microwave', 'pot']
 
 # kitchen tools with two words
 kitchenTools_two = {
     "food": ["processor"],
     "cookie": ["cutter", "sheet", "sheets"],
     "bread": ["knife"],
-    "cheese": ["grater, cutter, knife"]
+    "cheese": ["grater, cutter, knife"],
+    "pizza": ["wheel", "cutter"],
+    'soup': ['ladle'],
+    'rolling': ['pin'],
+    'baking': ['dish', 'pan', 'sheet', 'sheets']
 }
 
 # healthy food substitutions
@@ -42,6 +46,7 @@ healthList = {
     "mayonnaise": [2, "greek yogurt", .5, "mayonnaise", .5],
     "bacon": [1, "canadian bacon", 1],
     "pizza crust": [1, "cauliflower crust", 1],
+    "taco shell": [1, 'lettuce wrap', 1]
 }
 
 

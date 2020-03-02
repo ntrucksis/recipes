@@ -4,9 +4,14 @@ import requests
 from nltk import pos_tag, word_tokenize
 import sys
 from lists import healthList, pasta
+from nutritionInfo import tester
 
 
 def makeHealthy(ingredients, steps, recipeTitle):
+
+    #TEST
+    print(ingredients[0])
+    tester(ingredients[3])
 
 
     print('\nFinding healthy substitutions for your ingredients...')
