@@ -7,6 +7,9 @@ import sys
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 from lists import kitchenTools, kitchenTools_two
+import random
+
+#vegsublist = ['tofu', 'tempeh', 'seitan']
 
 def getpagelinks(searchpage):
   searchpage = requests.get(searchpage)
@@ -32,36 +35,53 @@ def getpagesearch(searchlink):
     newsearchlink = basesearchurl + str(x)
     searchlist.append(newsearchlink)
   return searchlist
-  
-searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
-allpagelinks = []
-for searchlink in searchlist:
-  pagelinkslist = getpagelinks(searchlink)
-  allpagelinks = allpagelinks + pagelinkslist
-#getting rid of duplicate/triplicate links
-allpagelinks = set(allpagelinks)
-allpagelinks = list(allpagelinks)
 
-allingredients = []
-for recipepage in allpagelinks:
-  ingredientnamelist = getingredients(recipepage)
-  allingredients = allingredients + ingredientnamelist
-#removing duplicates
-allingredients = set(allingredients)
-allingredients = list(allingredients)
-
-#needs work, right now it just changes everything not found in allingredients (vegetarian) list to tofu. This also includes 
-#medium carrots and thyme in this recipe: https://www.allrecipes.com/recipe/244700/beef-and-vegetable-soup/ , as well as broth 
-def checkIsVeg(recipeurl):
+#Use getpagesearch to get a list of pages with vegetarian recipes
+#That's the input to getVegIngreds
+#Then, use getpagelinks to get all of the recipe links out of each searchpage
+#Then, get all the ingredients from each recipe using getingredients, and add them to the list of allingredients
+def getingredients(recipeurl):
   recipeSoup = getRecipeSoup(recipeurl)
-  recipeTitle = recipeSoup.title.string.split('- ')[0]
   ingredientsList = getIngredientsList(recipeSoup)
   ingredients = getIngredientsObject(ingredientsList)
   ingredientnames = []
   for ingreditem in ingredients:
     ingredname = ingreditem['name']
-    if ingredname in allingredients:
-      ingredientnames.append(ingredname)
-    else:
-      ingredientnames.append('tofu')
+    ingredientnames.append(ingredname)
   return ingredientnames
+  
+def getVegIngreds(searchPageList):
+  allpagelinks = []
+  for searchlink in searchPageList:
+    pagelinkslist = getpagelinks(searchlink)
+    allpagelinks = allpagelinks + pagelinkslist
+  #getting rid of duplicate/triplicate links
+  allpagelinks = set(allpagelinks)
+  allpagelinks = list(allpagelinks)
+
+  allingredients = []
+  for recipepage in allpagelinks:
+    ingredientnamelist = getingredients(recipepage)
+    allingredients = allingredients + ingredientnamelist
+  #removing duplicates
+  allingredients = set(allingredients)
+  allingredients = list(allingredients)
+  return allingredients
+
+#searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+#vegingreds = getVegIngreds(searchlist)
+
+def changeToVeg(recipeObject, vegingredlist, vegsubs):
+  for k in recipeObject:
+    if checkIsInt(k):
+      ingredname = recipeObject[k]['name'].lower()
+      if not(ingredname in vegingredlist):
+        if ('grill' in recipeObject['primaryMethods']) or ('grill' in recipeObject['primaryMethods']) or ('grill' in recipeObject['tools']):
+          newname = 'tempeh'
+        elif (('broth' in ingredname) or ('stock' in ingredname)):
+          newname = 'vegetable broth'
+        else:
+          newname = random.choice(vegsubs)
+        #ingredientnames.append('tofu') #TODO make here random component from ingredDict
+        recipeObject[k]['name'] = newname
+  return recipeObject

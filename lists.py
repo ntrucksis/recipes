@@ -53,26 +53,59 @@ healthList = {
 
 # top ingedients for each cuisine so we know how to transform and classify recipes
 cuisines = {
-    "brazilian": ["onions", "olive oil", "lime", "coconut milk", "totatoes", "condensed milk"],
-    "british": ["flour", "butter", "milk" "eggs", "heavy cream", "baking powder", "unsalted butter"],
-    "cajun": ["garlic", "green bell pepper", "butter", "andouille sausage", "creole seasoning", "cajun seasoning", "celery ribs", "celery"],
-    "chinese": ["soy sauce", "sesame oil", "corn starch", "sugar", "five-spice powder","hoisin sauce", "oyster sauce", " peanut oil"],
-    "filipino": ["garlic", "onions", "soy sauce", "cooking oil", "bay leaf", "bay leaves", "fish sauce"],
-    "french": ["sugar", "flour", "unsalted butter", "olive oil", "shallots"],
-    "greek": ["olive oil", "dried oregano", "garlic cloves", "garlic", "oregano", "feta cheese", "feta", "cucumber", "lemon juice"],
-    "indian": ["onions", "garam masala", "ground turmeric", "turmeric", "masala", "tikki masala", "garam masala", "cumin seed", "green chilies"],
-    "irish": ["flour", "butter", "onions", "potatoes", "buttermilk", "baking powder", "milk"],
-    "italian": ["olive oil", "garlic cloves", "garlic", "grated parmesan", "parmesan", "basil", "e.v. olive oil", "black pepper"],
-    "jamaican": ["onions", "garlic", "ground allspice", "allspice", "thyme"],
-    "japanese": ["soy sauce", "mirin", "sugar", "shichimi", "sake", "rice vinegar", "scallions"],
-    "korean": ["soy sauce", "sesame oil", "garlic", "green onions", "sugar", "gochujang", "kimchi", "toasted sesame seeds", "sesame seeds", "sesame oil"],
-    "mexican": ["onions", "ground cumin", "cumin", "garlic", "olive oil", "adobo", "corn tortillas", "salsa", "flour tortilla", "tortilla", "black beans", "avocado"],
-    "moroccan": ["olive oil", "ground cumin", "cumin", "onions", "garlic cloves", "garlic", "couscous", "chickpeas", "ground ginger", "cinnamon", "ginger", "coriander"],
-    "russian": ["sugar", "onions", "flour", "sour cream", "beets", "dill", "potatos"],
-    "southern": ["butter", "flour", "sugar", "eggs", "buttermilk", "baking soda", "baking powder", "vanilla extract", "milk"],
-    "spanish": ["olive oil", "garlic cloves", "garlic", "e.v. olive oil", "e.v. olive oil", "white wine", "red bell pepper", "parsley", "tomatoes"],
-    "thai": ["fish sauce", "garlic", "coconut milk", "vegetable oil", "lemongrass", "peanuts", "lime juice"],
-    "vietnamese": ["fish sauce", "sugar", "garlic", "beansprouts", "cucumber", "rice vinegar", "lemongrass"],
+    "brazilian": ["onions", "olive oil", "lime", "coconut milk", "totatoes", "condensed milk", "chicken", "steak", "fish"],
+
+    "british": ["flour", "butter", "milk" "eggs", "heavy cream", "baking powder", "unsalted butter", "chicken", "steak", "fish",
+    "whipped butter", "european style butter", "chicken", "beef"],
+
+    "cajun": ["garlic", "green bell pepper", "butter", "andouille sausage", 
+    "creole seasoning", "cajun seasoning", "celery ribs", "celery", "chicken", "steak", "fish", "tilapai", "carp", "cod",
+    ],
+
+    "chinese": ["soy sauce", "sesame oil", "corn starch", "sugar", "five-spice powder","hoisin sauce", "oyster sauce", " peanut oil",
+     "white rice", "rice","bok choy", "wasabi", "chicken", "beef", "sesame seeds"],
+   
+    "filipino": ["garlic", "onions", "soy sauce", "cooking oil", "bay leaf", "bay leaves", "fish sauce", "ground cinnamon",
+    "crayfish", "oyster", "roe", "caviar"],
+   
+    "french": ["sugar", "flour", "unsalted butter", "olive oil", "shallots", "goat cheese"],
+   
+    "greek": ["olive oil", "dried oregano", "garlic cloves", "garlic", "oregano", "feta cheese", "feta",
+     "cucumber", "lemon juice", "lamb", "fenugreek"],
+   
+    "indian": ["onions", "garam masala", "ground turmeric", "turmeric", "masala", "tikki masala", "garam masala", "cumin seed", "green chilies",
+    "coconut milk", "ground cinnamon"],
+   
+    "irish": ["flour", "butter", "onions", "potatoes", "buttermilk", "baking powder", "milk", "whipped butter", "european style butter", "goat cheese"],
+   
+    "italian": ["olive oil", "garlic cloves", "garlic", "grated parmesan", "parmesan", "basil", "e.v. olive oil", 
+    "black pepper", "basil", "spagehetti", "fettuccine", "lunguine", "penne", "rigatoni", "orecchiette",
+ "farfalle", "pappardelle", "fusilli", "rigatoni", "orzo", "tortellini", "ziti",
+ "ravioli", "macaroni", "cappelletti", "lasagne", "gnocci", "rotini", "olives", "black olives", "alfredo", "marinara",
+ "sausage", "goat cheese"],
+   
+    "jamaican": ["onions", "garlic", "ground allspice", "allspice", "thyme", "sausage", "ground cinnamon"],
+   
+    "japanese": ["soy sauce", "mirin", "sugar", "shichimi", "sake", "rice vinegar", "scallions", "oyster", "clam", "mussel", "fish", "eel", "salmon",
+    "octopus", "squid", "white rice", "rice", "bok choy",  "wasabi", "crayfish", "oyster", "roe", "caviar", "sesame seeds"],
+   
+    "korean": ["soy sauce", "sesame oil", "garlic", "green onions", "sugar", "gochujang", "kimchi", "toasted sesame seeds", "sesame seeds", "sesame oil",
+    "beef", "bok choy", "wasabi", "crayfish", "oyster", "roe", "caviar"],
+   
+    "mexican": ["onions", "ground cumin", "cumin", "garlic", "olive oil", "adobo", "corn tortillas", "salsa", "flour tortilla", "tortilla", 
+    "black beans", "avocado", "chicken", "steak", "fish", "adobo", "chili powder", ],
+   
+    "moroccan": ["olive oil", "ground cumin", "cumin", "onions", "garlic cloves", "garlic", "couscous", "chickpeas",
+     "ground ginger", "cinnamon", "ginger", "coriander", "ground cinnamon", "saffron", "turmeric", "cumin", "cardamom", "mace", ],
+   
+    "spanish": ["olive oil", "garlic cloves", "garlic", "e.v. olive oil", "e.v. olive oil", "white wine", "red bell pepper", "parsley", "tomatoes",
+    "rice"],
+   
+    "thai": ["fish sauce", "garlic", "coconut milk", "vegetable oil", "lemongrass", "peanuts", "lime juice",
+    "rice", "white rice",],
+   
+    "vietnamese": ["fish sauce", "sugar", "garlic", "beansprouts", "cucumber", "rice vinegar", "lemongrass",
+    "rice", "bok choy", "wasabi", "crayfish", "oyster", "roe", "caviar"],
 }
 
 
@@ -110,7 +143,7 @@ spices = ["adobo", "chili powder", "masala", "five-spice powder", "curry powder"
  "allspice", "lemon pepper", "taco", "shichimi", "old bay", "tikki masala", "tandoori masala", "garlic salt",
  "nutmeg", "ginger", "saffron", "turmeric", "cumin", "cardamom", "mace", "fenugreek", "vanilla", "paprika",
  "fennel", "clove", "garlic", "black pepper", "coriander", "star anise", "anise", "mustard seed", "garam masala",
-  "chili powder", "onion powder"]
+  "chili powder", "onion powder", "ground turmeric", "cumin seed"]
 
 herbs = ["basil", "parsley", "rosemary", "thyme", "oregano", "sage", "chives", "mint", "dill", "lavender", "tarragon", "majoram", "coriander",
 "fennel", "chervil", "lemongrass", "cilantro", "pepperming", "chamomile", "anise", "arugula"]
@@ -129,7 +162,7 @@ cheese = ["cheese", "parmesan", "parmesan cheese", "feta", "goat cheese", "feta 
 vegetables = ["asparagus", "lettuce", "celery", "brussels sprout", "broccoli", "cabbage", "spinach", "potato", "carrot", "kale", "curly kale",
 "okra", "artichoke", "radish", "rhubarb", "pumpkin", "watercress", "cauliflower", "onion", "eggplant", "beetroot", "tomato", "parsnip", "arugula",
 "cucumber", "pea", "turnip", "collard", "sweet potato", "ginger", "chives", "bean", "black beans", "pinto beans", "corn", "sweet corn",
-"chesnut", "bok choy", "dill", "wasabi", "zucchini", "leek", "shallot", "beets", "beansprouts"]
+"chesnut", "bok choy", "dill", "wasabi", "zucchini", "leek", "shallot", "beets", "beansprouts", "bell pepper", "mushrooms","onions"]
 
 fruits = ["berry", "apple", "papaya", "blueberry", "raspberry", "pear", "pineapple", "mango",
  "apricot", "avocado", "banana", "cherry", "lemon", "grapefruit", "orange", "grape", "pomegranate",
