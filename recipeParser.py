@@ -265,7 +265,7 @@ def main(recipeUrl):
     
     #choice = input('Make vegetarian? (y/n): ')
     #if choice == 'y':
-    #      if (vegetarianingredients):
+    #      if not (vegetarianingredients):
     #        searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
     #        vegetarianingredients = getVegIngreds(searchlist)
     #      recipeObj, steps = changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
