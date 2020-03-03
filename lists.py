@@ -165,3 +165,11 @@ fruits = ["berry", "apple", "papaya", "blueberry", "raspberry", "pear", "pineapp
   "blackberry", "lime"]
 
 toppings = ["sesame seeds", "toasted sesame seeds"]
+
+measurements = ["package", "cup", "teaspoon", "tablespoon", "ounce", "teaspoons", "pound", "pounds",
+ "tablespoons", "pint", "pinch", "cups", "ounces", "slices", "packages", "cloves", "frying", "drop",
+ "packet", "fluid", "head", "inch", "container", "cubes", "cube", "quart", "quarts", "halves"]
+ 
+adjectivesInNames = ["black", "olive", "maple", "beef", "garlic", "sour", "lemon", "heavy", "yellow",
+ "chocolate", "vegetable", "lime", "angel", "bread", "cheese", "chorizo", "chipotle",
+ "jalapeno", "sazon", "spaghetti", "brownie", "chocolate", "candy", "tomato"]

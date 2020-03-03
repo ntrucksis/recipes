@@ -3,7 +3,7 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
-from lists import kitchenTools, kitchenTools_two
+from lists import kitchenTools, kitchenTools_two, measurements, adjectivesInNames
 from healthy import makeHealthy
 import sizetransform
 import transformvegetarian
@@ -25,7 +25,7 @@ def getIngredientsObject(ingredientsList):
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon', 'spaghetti', 'brownie', 'chocolate', 'candy']:
+                if word[0] in adjectivesInNames:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares', 'teaspoon', 'jars']:
@@ -39,7 +39,7 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch', 'container', 'cubes', 'cube', 'quart', 'quarts', 'halves']:
+                if word[0] not in measurements:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets', 'strips', 'thickness']:
                         if word[0] == 'strips':
                             prep += "cunt into " + word[0] + " "
@@ -189,7 +189,8 @@ def getSecondaryMethods(directionsList):
 def getSteps(directionsList):
     steps = []
     for i in range(len(directionsList)):
-        steps.append(directionsList[i])
+        step = directionsList[i].replace('Watch Now', '')
+        steps.append(step)
     return steps
 
 def buildRepresentation(recipeObj, steps):
