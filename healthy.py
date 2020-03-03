@@ -3,15 +3,16 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
-from lists import healthList, pasta
+from lists import healthList, pasta, healthSubs
 from nutritionInfo import tester
 
 
 def makeHealthy(ingredients, steps, recipeTitle):
 
     #TEST
-    print(ingredients[0])
-    tester(ingredients[3])
+#    print(ingredients[0])
+#    for i in ingredients:
+#        tester(i)
 
 
     print('\nFinding healthy substitutions for your ingredients...')
@@ -22,6 +23,8 @@ def makeHealthy(ingredients, steps, recipeTitle):
     healthy_ingredients = []
     # list of foods that got substituted
     substitutions = []
+    # list of foods that got removed
+    removed = []
     quant = ""
 
     #switch out pastas
@@ -30,6 +33,7 @@ def makeHealthy(ingredients, steps, recipeTitle):
 
     # switch out ingredients from healthList
     for ingredient in ingredients:
+        ingredient["name"] = ingredient["name"].lower()
         if ingredient["name"] in healthList:
             substitutions.append(ingredient["name"])
             #for every substitution ingredient
@@ -62,9 +66,19 @@ def makeHealthy(ingredients, steps, recipeTitle):
                 healthy_ingredients.append(ingredientObj)
                 ingredientNumber += 2
 
+        elif ingredient["name"] == 'salt':
+            removed.append(ingredient["name"])
+            continue
         else:
             old_ingredients.append(ingredient)
 
+    if removed != []:
+        print('Removed Ingredients: ' )
+    for ingredient in removed:
+        print(ingredient)
+        print("\n")
+
+    alreadySubbed = []
     for ingredient in healthy_ingredients:
         #print(f'Substitution for {ingredient["sub"]}')
         print(f'Ingredient Name: {ingredient["name"]} (substitution for {ingredient["substitution"]})')
@@ -74,10 +88,17 @@ def makeHealthy(ingredients, steps, recipeTitle):
         print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
         print('\n')
         # switch out old ingredients from directions
-        indx = 1
-        for i in range(len(steps) - 1):
-            if ingredient["substitution"] in steps[i]:
-                steps[i] = steps[i].replace(ingredient["substitution"], ingredient["name"])
+        if ingredient["substitution"] not in alreadySubbed:
+            if ingredient["substitution"] in healthSubs:
+                sub = healthSubs.get(ingredient["substitution"])
+            else:
+                sub = ingredient["name"]
+
+            alreadySubbed.append(ingredient["substitution"])
+            indx = 1
+            for i in range(len(steps) - 1):
+                if ingredient["substitution"] in steps[i]:
+                    steps[i] = steps[i].replace(ingredient["substitution"], sub)
 
     for ingredient in old_ingredients:
         # if spaghetti squash

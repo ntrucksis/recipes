@@ -5,11 +5,12 @@ from nltk import pos_tag, word_tokenize
 import sys
 from lists import kitchenTools, kitchenTools_two
 from healthy import makeHealthy
-import sizetransform
-import makevegetarian
+#import sizetransform
+#import makevegetarian
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
+    last_word = ""
     for i in range(len(ingredientsList)):
         tokenized = pos_tag(word_tokenize(ingredientsList[i]))
         name = ""
@@ -25,12 +26,12 @@ def getIngredientsObject(ingredientsList):
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon', 'spaghetti']:
+                if word[0] in ['black', 'olive', 'maple', 'beef', 'apples', 'garlic', 'cayenne', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon', 'spaghetti']:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares', 'teaspoon', 'jars']:
                         msmt+= word[0] + " "
-                    elif word[0] in ['frozen', '3-inch', 'finely', 'coarsely']:
+                    elif word[0] in ['frozen', '3-inch', 'finely', 'coarsely', 'stems']:
                         prep += word[0] + " "
                     elif word[0] in ['nonstick']:
                         desc += word[0] + " "
@@ -39,7 +40,7 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch', 'container', 'cubes', 'cube', 'quart', 'quarts']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch', 'container', 'cubes', 'cube', 'quart', 'quarts', 'jar']:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets']:
                         prep += word[0] + " "
                     # elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®', 'Campbell\'s®']:
@@ -55,7 +56,9 @@ def getIngredientsObject(ingredientsList):
                     else:
                         msmt += word[0] + " "
             elif word[1] in ['VBD', 'VBN', 'VB', 'VBG', 'VBP']:
-                if word[0] == 'taste' or 'to':
+                if word[0] == 'plain':
+                    desc += word[0] + " "
+                elif word[0] == 'taste' or word[0] == 'to':
                     pass
                 elif word[0] == 'cut':
                     prep += word[0] + ' into '
@@ -64,9 +67,15 @@ def getIngredientsObject(ingredientsList):
                 elif word[0] in ['needed', 'desired']:
                     pass
                 else:
+                    if last_word == 'and':
+                        prep = prep[:-1]
+                        prep += ', '
                     prep += word[0] + " "
+
             elif word[1] == 'IN':
                 pass
+
+            last_word = word[0] #keep track of previous word
 
         if len(q) > 1:
             tmp = q[1:]
@@ -82,6 +91,7 @@ def getIngredientsObject(ingredientsList):
         name = name[:-1]
         quant = quant[:-1]
         msmt = msmt[:-1]
+        print(prep)
         prep = prep[:-1]
         desc = desc[:-1]
 
@@ -250,21 +260,21 @@ def main(recipeUrl):
     for i in range(len(steps) - 1):
         print(f'Step {indx}: {steps[i]}')
         indx += 1
-    
+
     vegetarianingredients = []
 
     choice = input('Make healthy? (y/n): ')
     if choice == 'y':
         makeHealthy(ingredients, steps, recipeTitle)
         print('\n')
-    
+
     #choice = input('Make vegetarian? (y/n): ')
     #if choice == 'y':
     #      if (vegetarianingredients):
     #        searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
     #        vegetarianingredients = getVegIngreds(searchlist)
     #      vegrecipeobject = changeToVeg(recipeObj, vegetarianingredients, vegsubs)
-          
+
 
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
