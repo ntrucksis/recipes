@@ -6,7 +6,7 @@ import sys
 from lists import kitchenTools, kitchenTools_two
 from healthy import makeHealthy
 import sizetransform
-import makevegetarian
+import transformvegetarian
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -18,19 +18,19 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        print(tokenized)
+        # print(tokenized)
 
         for word in tokenized:
             if word[1] == 'CD':
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon', 'spaghetti']:
+                if word[0] in ['black', 'olive', 'maple', 'beef', 'garlic', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon', 'spaghetti', 'brownie', 'chocolate', 'candy']:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares', 'teaspoon', 'jars']:
                         msmt+= word[0] + " "
-                    elif word[0] in ['frozen', '3-inch', 'finely', 'coarsely']:
+                    elif word[0] in ['frozen', '3-inch', 'finely', 'coarsely', '1/4-inch']:
                         prep += word[0] + " "
                     elif word[0] in ['nonstick']:
                         desc += word[0] + " "
@@ -39,13 +39,15 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch', 'container', 'cubes', 'cube', 'quart', 'quarts']:
-                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets']:
-                        prep += word[0] + " "
-                    # elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®', 'Campbell\'s®']:
+                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch', 'container', 'cubes', 'cube', 'quart', 'quarts', 'halves']:
+                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets', 'strips', 'thickness']:
+                        if word[0] == 'strips':
+                            prep += "cunt into " + word[0] + " "
+                        else:
+                            prep += word[0] + " "
                     elif "®" in word[0]:
                         pass
-                    elif word[0] in ['semisweet', 'medium']:
+                    elif word[0] in ['semisweet', 'medium', 'skinless', 'boneless']:
                         desc += word[0] + " "
                     else:
                         name += word[0] + " "
@@ -55,18 +57,17 @@ def getIngredientsObject(ingredientsList):
                     else:
                         msmt += word[0] + " "
             elif word[1] in ['VBD', 'VBN', 'VB', 'VBG', 'VBP']:
-                if word[0] == 'taste' or 'to':
-                    pass
-                elif word[0] == 'cut':
-                    prep += word[0] + ' into '
-                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping', 'taco', 'seasoning', 'bacon', 'tomato', 'sauce']:
+                if word[0] in ['minced', 'beaten']:
+                    prep += word[0] + " "
+                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping', 'taco', 'seasoning', 'bacon', 'tomato', 'sauce', 'whipped', 'topping']:
                     name += word[0] + " "
-                elif word[0] in ['needed', 'desired']:
+                elif word[0] in ['needed', 'desired', 'to', 'state']:
                     pass
                 else:
                     prep += word[0] + " "
-            elif word[1] == 'IN':
-                pass
+            elif word[1] == 'FW':
+                if word[0] in ['paprika']:
+                    name += word[0] + " "
 
         if len(q) > 1:
             tmp = q[1:]
