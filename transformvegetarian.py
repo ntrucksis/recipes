@@ -8,6 +8,8 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 from lists import kitchenTools, kitchenTools_two
 import random
+import recipeParser
+import sizetransform
 
 #vegsublist = ['tofu', 'tempeh', 'seitan']
 
@@ -41,9 +43,9 @@ def getpagesearch(searchlink):
 #Then, use getpagelinks to get all of the recipe links out of each searchpage
 #Then, get all the ingredients from each recipe using getingredients, and add them to the list of allingredients
 def getingredients(recipeurl):
-  recipeSoup = getRecipeSoup(recipeurl)
-  ingredientsList = getIngredientsList(recipeSoup)
-  ingredients = getIngredientsObject(ingredientsList)
+  recipeSoup = recipeParser.getRecipeSoup(recipeurl)
+  ingredientsList = recipeParser.getIngredientsList(recipeSoup)
+  ingredients = recipeParser.getIngredientsObject(ingredientsList)
   ingredientnames = []
   for ingreditem in ingredients:
     ingredname = ingreditem['name']
@@ -73,7 +75,7 @@ def getVegIngreds(searchPageList):
 
 def changeToVeg(recipeObject, vegingredlist, vegsubs):
   for k in recipeObject:
-    if checkIsInt(k):
+    if sizetransform.checkIsInt(k):
       ingredname = recipeObject[k]['name'].lower()
       if not(ingredname in vegingredlist):
         if ('grill' in recipeObject['primaryMethods']) or ('grill' in recipeObject['primaryMethods']) or ('grill' in recipeObject['tools']):

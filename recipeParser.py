@@ -196,6 +196,35 @@ def getSteps(directionsList):
 def buildRepresentation(recipeObj, steps):
     pass
 
+#Print recipe object code 
+def printObject(recipeObject, steps_list, title):
+  print(f'\nRecipe Title: {title}\n')
+  for k in recipeObject:
+    if checkIsInt(k):
+      print(f'Ingredient Name: {recipeObject[k]["name"]}')
+      print(f'Ingredient Quantity: {recipeObject[k]["quantity"]}')
+      print(f'Ingredient Measurement: {recipeObject[k]["measurement"]}')
+      print(f'Ingredient Preparation: {recipeObject[k]["preparation"]}')
+      print(f'Ingredient Descriptors: {recipeObject[k]["descriptors"]}')
+      print('\n')
+    else:
+      break
+
+  print(f'Tools for Recipe: {recipeObject["tools"]}\n')
+
+  print(f'Primary Cooking Methods: {recipeObject["primaryMethods"]}\n')
+
+  print(f'Secondary Cooking Methods: {recipeObject["secondaryMethods"]}\n')
+
+  print('Steps to Complete the Recipe: \n')
+  indx = 1
+  for i in range(len(steps) - 1):
+    print(f'Step {indx}: {steps[i]}')
+    indx += 1
+  
+  return
+
+
 def main(recipeUrl):
     # create soup object that represents the input recipe's web page
     recipeSoup = getRecipeSoup(recipeUrl)
@@ -263,12 +292,24 @@ def main(recipeUrl):
         makeHealthy(ingredients, steps, recipeTitle)
         print('\n')
     
-    #choice = input('Make vegetarian? (y/n): ')
-    #if choice == 'y':
-    #      if not (vegetarianingredients):
-    #        searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
-    #        vegetarianingredients = getVegIngreds(searchlist)
-    #      recipeObj, steps = changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
+    choice = input('Make vegetarian? (y/n): ')
+    if choice == 'y':
+        if not (vegetarianingredients):
+            searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+            vegetarianingredients = getVegIngreds(searchlist)
+        recipeObj, steps = changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
+        printObject(recipeObj, steps, recipeTitle) 
+
+    choice = input('Double size? (y/n): ')
+    if choice == 'y':
+        recipeObj = doubleSize(recipeObj)
+        printObject(recipeObj, steps, recipeTitle)
+    
+    choice = input('Halve size? (y/n): ')
+    if choice == 'y':
+        recipeObj = halfSize(recipeObj)
+        printObject(recipeObj, steps, recipeTitle)
+
           
 
 if __name__ == '__main__':
