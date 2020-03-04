@@ -20,7 +20,7 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        # print(tokenized)
+        #print(tokenized)
 
         for word in tokenized:
             if word[1] == 'CD':
@@ -49,7 +49,7 @@ def getIngredientsObject(ingredientsList):
                             prep += word[0] + " "
                     elif "®" in word[0]:
                         pass
-                    elif word[0] in ['semisweet', 'medium', 'skinless', 'boneless']:
+                    elif word[0] in ['semisweet', 'medium', 'skinless', 'boneless', 'flavor']:
                         desc += word[0] + " "
                     else:
                         name += word[0] + " "
@@ -318,13 +318,13 @@ def main(recipeUrl):
             print ('Here is your recipe:')
             printObject(recipeObj, steps, recipeTitle)
             break
-        # choice = input('Make healthy? (y/n): ')
+
         if choice == '1':
-            makeHealthy(ingredients, steps, recipeTitle)
+            healthy_ingredDict, steps = makeHealthy(ingredients, steps, recipeTitle, recipeObj)
+            recipeObj = {**healthy_ingredDict , **tools , **primaryMethods , **secondaryMethods}
             print('\n')
             continue
 
-        # choice = input('Make vegetarian? (y/n): ')
         if choice == '2':
             if not (vegetarianingredients):
                 searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")

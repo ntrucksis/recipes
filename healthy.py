@@ -7,12 +7,15 @@ from lists import healthList, pasta, healthSubs
 from nutritionInfo import tester
 
 
-def makeHealthy(ingredients, steps, recipeTitle):
+def makeHealthy(ingredients, steps, recipeTitle, recipeObj):
 
     #TEST
-    print(ingredients[0])
-    for i in ingredients:
-        tester(i)
+#    print(ingredients[0])
+#    for i in ingredients:
+#        tester(i)
+
+    for k in recipeObj:
+        print(k)
 
 
     print('\nFinding healthy substitutions for your ingredients...')
@@ -64,6 +67,8 @@ def makeHealthy(ingredients, steps, recipeTitle):
                 }
 
                 healthy_ingredients.append(ingredientObj)
+                #try adding to old_ingredients
+                old_ingredients.append(ingredientObj)
                 ingredientNumber += 2
 
         elif ingredient["name"] == 'salt':
@@ -81,12 +86,12 @@ def makeHealthy(ingredients, steps, recipeTitle):
     alreadySubbed = []
     for ingredient in healthy_ingredients:
         #print(f'Substitution for {ingredient["sub"]}')
-        print(f'Ingredient Name: {ingredient["name"]} (substitution for {ingredient["substitution"]})')
-        print(f'Ingredient Quantity: {ingredient["quantity"]}')
-        print(f'Ingredient Measurement: {ingredient["measurement"]}')
-        print(f'Ingredient Preparation: {ingredient["preparation"]}')
-        print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
-        print('\n')
+        #print(f'Ingredient Name: {ingredient["name"]} (substitution for {ingredient["substitution"]})')
+        #print(f'Ingredient Quantity: {ingredient["quantity"]}')
+        #print(f'Ingredient Measurement: {ingredient["measurement"]}')
+        #print(f'Ingredient Preparation: {ingredient["preparation"]}')
+        #print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
+        #print('\n')
         # switch out old ingredients from directions
         if ingredient["substitution"] not in alreadySubbed:
             if ingredient["substitution"] in healthSubs:
@@ -104,6 +109,8 @@ def makeHealthy(ingredients, steps, recipeTitle):
         # if spaghetti squash
         if ingredient["name"] == "squash" and ingredient["descriptors"] == "as pasta replacement":
             print(f'Ingredient Name: {ingredient["name"]} (substitution for {old_pasta})')
+        elif "substitution" in ingredient:
+            print(f'Ingredient Name: {ingredient["name"]} (substitution for {ingredient["substitution"]})')
         else:
             print(f'Ingredient Name: {ingredient["name"]}')
         print(f'Ingredient Quantity: {ingredient["quantity"]}')
@@ -118,6 +125,12 @@ def makeHealthy(ingredients, steps, recipeTitle):
         print(f'Step {indx}: {steps[i]}')
         indx += 1
 
+    #make recipeObj
+    ingredDict = {}
+    for i in range(len(ingredients)):
+        ingredDict[f'{i}'] = old_ingredients[i]
+
+    return ingredDict, steps
 
 def convertFractoFloat(number):
     total = 0
