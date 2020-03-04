@@ -81,7 +81,7 @@ def getIngredientsObject(ingredientsList):
 
         if len(q) > 1:
             tmp = q[1:]
-            print(tmp)
+            #print(tmp)
             for element in tmp:
                 if element not in ['1/4', '1/2', '3/4', '1/3', '2/3']:
                     msmtPart = element + " "
@@ -93,7 +93,7 @@ def getIngredientsObject(ingredientsList):
         name = name[:-1]
         quant = quant[:-1]
         msmt = msmt[:-1]
-        print(prep)
+        #print(prep)
         prep = prep[:-1]
         desc = desc[:-1]
 
@@ -311,6 +311,7 @@ def main(recipeUrl):
         print ('(4) Halve size?')
         print ('(5) Make non-vegetarian?')
         print ('(6) Change cuisine?')
+        print ('(7) Start over with new recipe?')
         choice = input()
 
         if choice == '0':
@@ -406,6 +407,9 @@ def main(recipeUrl):
                 printObject(recipeObj, steps, recipeTitle)
                 continue
 
+        if choice == '7':
+            recipeUrl = input('\nProvide a url for your recipe: ')
+            main(recipeUrl)
 
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
