@@ -51,6 +51,22 @@ healthList = {
     "feta cheese": [1, 'nutritional yeast', 1]
 }
 
+measurement_conversions = {
+    "ounces": ["oz", 1, 'ounce', 1, 'pound', 16, 'pounds', 16, 'lbs', 16, 'cups', 8, 'cup', 8],
+    "oz": ["oz", 1, 'ounce', 1, 'pound', 16, 'pounds', 16, 'lbs', 16, 'cups', 8, 'cup', 8],
+    "ounce": ["oz", 1, 'ounce', 1, 'pound', 16, 'pounds', 16, 'lbs', 16, 'cups', 8, 'cup', 8],
+    "cup": ["pint", 2, "quart", 4, "gallon", 16],
+    "cups": ["pint", 2, "quart", 4, "gallon", 16],
+    "tbsp": ["cup", 16, "tablespoon", 1, "tablespoons", 1],
+    "tbsps": ["cup", 16, "tablespoon", 1, "tablespoons", 1],
+    "tablespoons": ["cup", 16, "tablespoon", 1, "tablespoons", 1],
+    "tablespoon": ["cup", 16, "tablespoon", 1, "tablespoons", 1],
+    "tsp": ["tbsp", 3, "tablespoon", 3, "tablespoons", 3],
+    "tsps": ["tbsp", 3, "tablespoon", 3, "tablespoons", 3],
+    "teaspoon": ["tbsp", 3, "tablespoon", 3, "tablespoons", 3],
+    "teaspoons": ["tbsp", 3, "tablespoon", 3, "tablespoons", 3]
+}
+
 healthSubs = {
     "butter": "almond butter and coconut oil",
     "croutons": "almonds and walnuts",

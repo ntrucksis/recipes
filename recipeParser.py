@@ -46,7 +46,7 @@ def getIngredientsObject(ingredientsList):
                     # elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®', 'Campbell\'s®']:
                     elif "®" in word[0]:
                         pass
-                    elif word[0] in ['semisweet', 'medium']:
+                    elif word[0] in ['semisweet', 'medium', 'flavor']:
                         desc += word[0] + " "
                     else:
                         name += word[0] + " "
@@ -66,6 +66,9 @@ def getIngredientsObject(ingredientsList):
                     name += word[0] + " "
                 elif word[0] in ['needed', 'desired']:
                     pass
+            elif word[1] in ['DT']:
+                if word[0] == 'any':
+                    desc += word[0] + ' '
                 else:
                     if last_word == 'and':
                         prep = prep[:-1]
@@ -262,6 +265,9 @@ def main(recipeUrl):
         indx += 1
 
     vegetarianingredients = []
+    vegsubstitues = ['tofu', 'tempeh', 'seitan']
+    brothReplacements = ['beef broth', 'chicken broth']
+    meatreplacements = ['beef', 'chicken', 'turkey']
 
     choice = input('Make healthy? (y/n): ')
     if choice == 'y':
@@ -273,7 +279,7 @@ def main(recipeUrl):
     #      if (vegetarianingredients):
     #        searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
     #        vegetarianingredients = getVegIngreds(searchlist)
-    #      vegrecipeobject = changeToVeg(recipeObj, vegetarianingredients, vegsubs)
+    #      recipeObj, steps = changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
 
 
 if __name__ == '__main__':

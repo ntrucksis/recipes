@@ -10,9 +10,9 @@ from nutritionInfo import tester
 def makeHealthy(ingredients, steps, recipeTitle):
 
     #TEST
-#    print(ingredients[0])
-#    for i in ingredients:
-#        tester(i)
+    print(ingredients[0])
+    for i in ingredients:
+        tester(i)
 
 
     print('\nFinding healthy substitutions for your ingredients...')
