@@ -3,10 +3,11 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
-from lists import kitchenTools, kitchenTools_two
+from lists import kitchenTools, kitchenTools_two, measurements, adjectivesInNames
 from healthy import makeHealthy
-#import sizetransform
-#import makevegetarian
+import sizetransform
+import transformvegetarian
+from cuisine import Cuisine
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -19,19 +20,19 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
-        print(tokenized)
+        # print(tokenized)
 
         for word in tokenized:
             if word[1] == 'CD':
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
-                if word[0] in ['black', 'olive', 'maple', 'beef', 'apples', 'garlic', 'cayenne', 'sour', 'lemon', 'heavy', 'yellow', 'chocolate', 'vegetable', 'lime', 'angel', 'bread', 'cheese', 'chorizo', 'chipotle', 'jalapeno', 'sazon', 'spaghetti']:
+                if word[0] in adjectivesInNames:
                     name += word[0] + " "
                 else:
                     if word[0] in ['pinch', 'cup', 'can', 'cans', 'packages', 'fluid', 'squares', 'teaspoon', 'jars']:
                         msmt+= word[0] + " "
-                    elif word[0] in ['frozen', '3-inch', 'finely', 'coarsely', 'stems']:
+                    elif word[0] in ['frozen', '3-inch', 'finely', 'coarsely', '1/4-inch']:
                         prep += word[0] + " "
                     elif word[0] in ['nonstick']:
                         desc += word[0] + " "
@@ -40,13 +41,15 @@ def getIngredientsObject(ingredientsList):
                     else:
                         desc += word[0] + " "
             elif word[1] in ['NN', 'NNS', 'NNP']:
-                if word[0] not in ['package', 'cup', 'teaspoon', 'tablespoon', 'ounce', 'teaspoons', 'pound', 'pounds', 'tablespoons', 'pint', 'pinch', 'cups', 'ounces', 'slices', 'packages', 'cloves', 'frying', 'drop', 'packet', 'fluid', 'head', 'inch', 'container', 'cubes', 'cube', 'quart', 'quarts', 'jar']:
-                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets']:
-                        prep += word[0] + " "
-                    # elif word[0] in ['Pillsbury®', 'Recipe', 'Creations®', 'Campbell\'s®']:
+                if word[0] not in measurements:
+                    if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets', 'strips', 'thickness']:
+                        if word[0] == 'strips':
+                            prep += "cunt into " + word[0] + " "
+                        else:
+                            prep += word[0] + " "
                     elif "®" in word[0]:
                         pass
-                    elif word[0] in ['semisweet', 'medium', 'flavor']:
+                    elif word[0] in ['semisweet', 'medium', 'skinless', 'boneless']:
                         desc += word[0] + " "
                     else:
                         name += word[0] + " "
@@ -56,15 +59,11 @@ def getIngredientsObject(ingredientsList):
                     else:
                         msmt += word[0] + " "
             elif word[1] in ['VBD', 'VBN', 'VB', 'VBG', 'VBP']:
-                if word[0] == 'plain':
-                    desc += word[0] + " "
-                elif word[0] == 'taste' or word[0] == 'to':
-                    pass
-                elif word[0] == 'cut':
-                    prep += word[0] + ' into '
-                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping', 'taco', 'seasoning', 'bacon', 'tomato', 'sauce']:
+                if word[0] in ['minced', 'beaten']:
+                    prep += word[0] + " "
+                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping', 'taco', 'seasoning', 'bacon', 'tomato', 'sauce', 'whipped', 'topping']:
                     name += word[0] + " "
-                elif word[0] in ['needed', 'desired']:
+                elif word[0] in ['needed', 'desired', 'to', 'state']:
                     pass
             elif word[1] in ['DT']:
                 if word[0] == 'any':
@@ -74,9 +73,9 @@ def getIngredientsObject(ingredientsList):
                         prep = prep[:-1]
                         prep += ', '
                     prep += word[0] + " "
-
-            elif word[1] == 'IN':
-                pass
+            elif word[1] == 'FW':
+                if word[0] in ['paprika']:
+                    name += word[0] + " "
 
             last_word = word[0] #keep track of previous word
 
@@ -201,11 +200,41 @@ def getSecondaryMethods(directionsList):
 def getSteps(directionsList):
     steps = []
     for i in range(len(directionsList)):
-        steps.append(directionsList[i])
+        step = directionsList[i].replace('Watch Now', '').rstrip()
+        steps.append(step)
     return steps
 
 def buildRepresentation(recipeObj, steps):
     pass
+
+#Print recipe object code
+def printObject(recipeObject, steps_list, title):
+  print(f'\nRecipe Title: {title}\n')
+  for k in recipeObject:
+    if sizetransform.checkIsInt(k):
+      print(f'Ingredient Name: {recipeObject[k]["name"]}')
+      print(f'Ingredient Quantity: {recipeObject[k]["quantity"]}')
+      print(f'Ingredient Measurement: {recipeObject[k]["measurement"]}')
+      print(f'Ingredient Preparation: {recipeObject[k]["preparation"]}')
+      print(f'Ingredient Descriptors: {recipeObject[k]["descriptors"]}')
+      print('\n')
+    else:
+      break
+
+  print(f'Tools for Recipe: {recipeObject["tools"]}\n')
+
+  print(f'Primary Cooking Methods: {recipeObject["primaryMethods"]}\n')
+
+  print(f'Secondary Cooking Methods: {recipeObject["secondaryMethods"]}\n')
+
+  print('Steps to Complete the Recipe: \n')
+  indx = 1
+  for i in range(len(steps_list) - 1):
+    print(f'Step {indx}: {steps_list[i]}')
+    indx += 1
+
+  return
+
 
 def main(recipeUrl):
     # create soup object that represents the input recipe's web page
@@ -265,21 +294,117 @@ def main(recipeUrl):
         indx += 1
 
     vegetarianingredients = []
-    vegsubstitues = ['tofu', 'tempeh', 'seitan']
+    vegsubstitutes = ['tofu', 'tempeh', 'seitan']
     brothReplacements = ['beef broth', 'chicken broth']
     meatreplacements = ['beef', 'chicken', 'turkey']
+    measureslist = ['pound', 'pounds', 'ounce', 'ounces', 'oz', 'lb', 'kilogram', 'kilograms', 'package']
 
-    choice = input('Make healthy? (y/n): ')
-    if choice == 'y':
-        makeHealthy(ingredients, steps, recipeTitle)
-        print('\n')
+    transforming = True
+    while (transforming):
+        print ('\n')
+        print ('Apply a transformation?')
+        print ('\n')
+        print ('(0) Done, show me my final recipe!')
+        print ('(1) Make healthy?')
+        print ('(2) Make vegetarian?')
+        print ('(3) Double size?')
+        print ('(4) Halve size?')
+        print ('(5) Make non-vegetarian?')
+        print ('(6) Change cuisine?')
+        choice = input()
 
-    #choice = input('Make vegetarian? (y/n): ')
-    #if choice == 'y':
-    #      if (vegetarianingredients):
-    #        searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
-    #        vegetarianingredients = getVegIngreds(searchlist)
-    #      recipeObj, steps = changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
+        if choice == '0':
+            transforming = False
+            print ('Here is your recipe:')
+            printObject(recipeObj, steps, recipeTitle)
+            break
+        # choice = input('Make healthy? (y/n): ')
+        if choice == '1':
+            makeHealthy(ingredients, steps, recipeTitle)
+            print('\n')
+            continue
+
+        # choice = input('Make vegetarian? (y/n): ')
+        if choice == '2':
+            if not (vegetarianingredients):
+                searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+                vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
+            recipeObj, steps = transformvegetarian.changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
+
+        # choice = input('Double size? (y/n): ')
+        if choice == '3':
+            recipeObj = sizetransform.doubleSize(recipeObj)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
+
+        # choice = input('Halve size? (y/n): ')
+        if choice == '4':
+            recipeObj = sizetransform.halfSize(recipeObj)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
+
+        # choice = input('Make non-vegetarian? (y/n): ')
+        if choice == '5':
+            if not (vegetarianingredients):
+                searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+                vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
+            recipeObj, steps = transformvegetarian.changeFromVeg(recipeObj, vegetarianingredients, meatreplacements, brothReplacements, vegsubstitutes, measureslist, steps)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
+
+        if choice == '6':
+            cuisine = Cuisine(recipeObj)
+            cuisine.classify()
+            print ('Select a cuisine to transform to:')
+            print ('(1) British')
+            print ('(2) Cajun')
+            print ('(3) Chinese')
+            print ('(4) French')
+            print ('(5) Greek')
+            print ('(6) Indian')
+            print ('(7) Italian')
+            print ('(8) Japanese')
+            print ('(9) Mexican')
+
+            choice = input()
+            if choice == '1':
+                recipeObj = cuisine.transform('british')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '2':
+                recipeObj = cuisine.transform('cajun')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '3':
+                recipeObj = cuisine.transform('chinese')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '4':
+                recipeObj = cuisine.transform('french')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '5':
+                recipeObj = cuisine.transform('greek')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '6':
+                recipeObj = cuisine.transform('indian')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '7':
+                recipeObj = cuisine.transform('italian')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '8':
+                recipeObj = cuisine.transform('japanese')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '9':
+                recipeObj = cuisine.transform('mexican')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
 
 
 if __name__ == '__main__':
