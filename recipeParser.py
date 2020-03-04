@@ -200,7 +200,7 @@ def buildRepresentation(recipeObj, steps):
 def printObject(recipeObject, steps_list, title):
   print(f'\nRecipe Title: {title}\n')
   for k in recipeObject:
-    if checkIsInt(k):
+    if sizetransform.checkIsInt(k):
       print(f'Ingredient Name: {recipeObject[k]["name"]}')
       print(f'Ingredient Quantity: {recipeObject[k]["quantity"]}')
       print(f'Ingredient Measurement: {recipeObject[k]["measurement"]}')
@@ -218,8 +218,8 @@ def printObject(recipeObject, steps_list, title):
 
   print('Steps to Complete the Recipe: \n')
   indx = 1
-  for i in range(len(steps) - 1):
-    print(f'Step {indx}: {steps[i]}')
+  for i in range(len(steps_list) - 1):
+    print(f'Step {indx}: {steps_list[i]}')
     indx += 1
   
   return
@@ -283,9 +283,10 @@ def main(recipeUrl):
         indx += 1
     
     vegetarianingredients = []
-    vegsubstitues = ['tofu', 'tempeh', 'seitan']
+    vegsubstitutes = ['tofu', 'tempeh', 'seitan']
     brothReplacements = ['beef broth', 'chicken broth']
     meatreplacements = ['beef', 'chicken', 'turkey']
+    measureslist = ['pound', 'pounds', 'ounce', 'ounces', 'oz', 'lb', 'kilogram', 'kilograms', 'package']
 
     choice = input('Make healthy? (y/n): ')
     if choice == 'y':
@@ -295,21 +296,28 @@ def main(recipeUrl):
     choice = input('Make vegetarian? (y/n): ')
     if choice == 'y':
         if not (vegetarianingredients):
-            searchlist = getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
-            vegetarianingredients = getVegIngreds(searchlist)
-        recipeObj, steps = changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
+            searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+            vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
+        recipeObj, steps = transformvegetarian.changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
         printObject(recipeObj, steps, recipeTitle) 
 
     choice = input('Double size? (y/n): ')
     if choice == 'y':
-        recipeObj = doubleSize(recipeObj)
+        recipeObj = sizetransform.doubleSize(recipeObj)
         printObject(recipeObj, steps, recipeTitle)
     
     choice = input('Halve size? (y/n): ')
     if choice == 'y':
-        recipeObj = halfSize(recipeObj)
+        recipeObj = sizetransform.halfSize(recipeObj)
         printObject(recipeObj, steps, recipeTitle)
-
+    
+    choice = input('Make non-vegetarian? (y/n): ')
+    if choice == 'y':
+        if not (vegetarianingredients):
+            searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+            vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
+        recipeObj, steps = transformvegetarian.changeFromVeg(recipeObj, vegetarianingredients, meatreplacements, brothReplacements, vegsubstitutes, measureslist, steps)
+        printObject(recipeObj, steps, recipeTitle)
           
 
 if __name__ == '__main__':
