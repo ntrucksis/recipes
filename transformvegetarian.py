@@ -33,7 +33,7 @@ def getpagelinks(searchpage):
 def getpagesearch(searchlink):
   searchlist = []
   basesearchurl = searchlink[:-1]
-  for x in range(2, 20):
+  for x in range(2, 30):
     newsearchlink = basesearchurl + str(x)
     searchlist.append(newsearchlink)
   return searchlist
