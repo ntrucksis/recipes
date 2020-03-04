@@ -189,7 +189,7 @@ def getSecondaryMethods(directionsList):
 def getSteps(directionsList):
     steps = []
     for i in range(len(directionsList)):
-        step = directionsList[i].replace('Watch Now', '')
+        step = directionsList[i].replace('Watch Now', '').rstrip()
         steps.append(step)
     return steps
 
@@ -288,36 +288,60 @@ def main(recipeUrl):
     meatreplacements = ['beef', 'chicken', 'turkey']
     measureslist = ['pound', 'pounds', 'ounce', 'ounces', 'oz', 'lb', 'kilogram', 'kilograms', 'package']
 
-    choice = input('Make healthy? (y/n): ')
-    if choice == 'y':
-        makeHealthy(ingredients, steps, recipeTitle)
-        print('\n')
-    
-    choice = input('Make vegetarian? (y/n): ')
-    if choice == 'y':
-        if not (vegetarianingredients):
-            searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
-            vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
-        recipeObj, steps = transformvegetarian.changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
-        printObject(recipeObj, steps, recipeTitle) 
 
-    choice = input('Double size? (y/n): ')
-    if choice == 'y':
-        recipeObj = sizetransform.doubleSize(recipeObj)
-        printObject(recipeObj, steps, recipeTitle)
-    
-    choice = input('Halve size? (y/n): ')
-    if choice == 'y':
-        recipeObj = sizetransform.halfSize(recipeObj)
-        printObject(recipeObj, steps, recipeTitle)
-    
-    choice = input('Make non-vegetarian? (y/n): ')
-    if choice == 'y':
-        if not (vegetarianingredients):
-            searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
-            vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
-        recipeObj, steps = transformvegetarian.changeFromVeg(recipeObj, vegetarianingredients, meatreplacements, brothReplacements, vegsubstitutes, measureslist, steps)
-        printObject(recipeObj, steps, recipeTitle)
+    transforming = True
+    while (transforming):
+        print ('\n')
+        print ('Apply a transformation?')
+        print ('\n')
+        print ('(0) Done, show me my final recipe!')
+        print ('(1) Make healthy?')
+        print ('(2) Make vegetarian?')
+        print ('(3) Double size?')
+        print ('(4) Halve size?')
+        print ('(5) Make non-vegetarian?')
+        choice = input()
+
+        if choice == '0':
+            transforming = False
+            print ('Here is your recipe:')
+            printObject(recipeObj, steps, recipeTitle) 
+            break
+        # choice = input('Make healthy? (y/n): ')
+        if choice == '1':
+            makeHealthy(ingredients, steps, recipeTitle)
+            print('\n')
+            continue
+        
+        # choice = input('Make vegetarian? (y/n): ')
+        if choice == '2':
+            if not (vegetarianingredients):
+                searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+                vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
+            recipeObj, steps = transformvegetarian.changeToVeg(recipeObj, vegetarianingredients, vegsubstitutes, steps)
+            printObject(recipeObj, steps, recipeTitle)
+            continue 
+
+        # choice = input('Double size? (y/n): ')
+        if choice == '3':
+            recipeObj = sizetransform.doubleSize(recipeObj)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
+        
+        # choice = input('Halve size? (y/n): ')
+        if choice == '4':
+            recipeObj = sizetransform.halfSize(recipeObj)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
+        
+        # choice = input('Make non-vegetarian? (y/n): ')
+        if choice == '5':
+            if not (vegetarianingredients):
+                searchlist = transformvegetarian.getpagesearch("https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/?page=4")
+                vegetarianingredients = transformvegetarian.getVegIngreds(searchlist)
+            recipeObj, steps = transformvegetarian.changeFromVeg(recipeObj, vegetarianingredients, meatreplacements, brothReplacements, vegsubstitutes, measureslist, steps)
+            printObject(recipeObj, steps, recipeTitle)
+            continue
           
 
 if __name__ == '__main__':
