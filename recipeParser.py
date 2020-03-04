@@ -7,6 +7,7 @@ from lists import kitchenTools, kitchenTools_two, measurements, adjectivesInName
 from healthy import makeHealthy
 import sizetransform
 import transformvegetarian
+from cuisine import Cuisine
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -288,7 +289,6 @@ def main(recipeUrl):
     meatreplacements = ['beef', 'chicken', 'turkey']
     measureslist = ['pound', 'pounds', 'ounce', 'ounces', 'oz', 'lb', 'kilogram', 'kilograms', 'package']
 
-
     transforming = True
     while (transforming):
         print ('\n')
@@ -300,6 +300,7 @@ def main(recipeUrl):
         print ('(3) Double size?')
         print ('(4) Halve size?')
         print ('(5) Make non-vegetarian?')
+        print ('(6) Change cuisine?')
         choice = input()
 
         if choice == '0':
@@ -342,7 +343,59 @@ def main(recipeUrl):
             recipeObj, steps = transformvegetarian.changeFromVeg(recipeObj, vegetarianingredients, meatreplacements, brothReplacements, vegsubstitutes, measureslist, steps)
             printObject(recipeObj, steps, recipeTitle)
             continue
-          
+
+        if choice == '6':
+            cuisine = Cuisine(recipeObj)
+            cuisine.classify()
+            print ('Select a cuisine to transform to:')
+            print ('(1) British')
+            print ('(2) Cajun')
+            print ('(3) Chinese')
+            print ('(4) French')
+            print ('(5) Greek')
+            print ('(6) Indian')
+            print ('(7) Italian')
+            print ('(8) Japanese')
+            print ('(9) Mexican')
+
+            choice = input()
+            if choice == '1':
+                recipeObj = cuisine.transform('british')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '2':
+                recipeObj = cuisine.transform('cajun')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '3':
+                recipeObj = cuisine.transform('chinese')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '4':
+                recipeObj = cuisine.transform('french')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '5':
+                recipeObj = cuisine.transform('greek')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '6':
+                recipeObj = cuisine.transform('indian')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '7':
+                recipeObj = cuisine.transform('italian')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '8':
+                recipeObj = cuisine.transform('japanese')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+            if choice == '9':
+                recipeObj = cuisine.transform('mexican')
+                printObject(recipeObj, steps, recipeTitle)
+                continue
+
 
 if __name__ == '__main__':
     recipeUrl = input('Provide a url for your recipe: ')
