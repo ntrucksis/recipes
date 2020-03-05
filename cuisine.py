@@ -23,8 +23,9 @@ class Cuisine:
 	to another kind
 	Takes in a master recipe dict with all parsed data about the recipe
 	'''
-	def __init__(self, recipe):
-		self.data = recipe	
+	def __init__(self, recipe, steps):
+		self.data = recipe
+		self.steps = steps
 		self.classified_cuisine = None
 		self.ingredients = None
 	
@@ -50,6 +51,14 @@ class Cuisine:
 				self.classified_cuisine = cuisine
 
 		print (f'\nCurent estimated cuisine type: {self.classified_cuisine}\n')
+
+	def subNameInSteps(self, stepslist, oldname, newname):
+		print ('subbing', oldname, newname)
+		for i in range(len(stepslist) - 1):
+			if oldname in stepslist[i]:
+				print ('should replace', oldname, stepslist[i])
+				stepslist[i] = stepslist[i].replace(oldname, newname)
+		return stepslist
 
 	def transform(self, cuisine):
 		cuisine_ingredients = cuisines[cuisine]
@@ -78,7 +87,7 @@ class Cuisine:
 					continue
 			cuis_classified.append((ingredient, ingredient_type))
 
-		# print (cuis_classified)
+		# print ('steps',self.steps)
 		for ing in classified:
 			for cuis_ing in cuis_classified:
 				if ing[1] == cuis_ing[1] and ing[0] != cuis_ing[0]:
@@ -89,11 +98,13 @@ class Cuisine:
 						except:
 							continue
 					print (f'Ingredient transformation: {ing[0]} to {cuis_ing[0]}')
+					self.steps = self.subNameInSteps(self.steps, ing[0], cuis_ing[0])
+
 					cuis_classified.remove(cuis_ing)
 					break
 
 		# print (self.data)
-		return self.data
+		return self.data, self.steps
 
 
 # Testing

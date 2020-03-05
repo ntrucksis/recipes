@@ -4,7 +4,7 @@ import requests
 from nltk import pos_tag, word_tokenize
 import sys
 from lists import healthList, pasta, healthSubs
-from nutritionInfo import tester
+# from nutritionInfo import tester
 
 def checkIsInt(key):
   try:
