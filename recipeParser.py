@@ -3,11 +3,12 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
-from lists import kitchenTools, kitchenTools_two, measurements, adjectivesInNames
+from lists import kitchenTools, kitchenTools_two, measurements, adjectivesInNames, fruits, meat, vegetables
 from healthy import makeHealthy
 import sizetransform
 import transformvegetarian
 from cuisine import Cuisine
+from unhealthy import makeUnhealthy
 
 def getIngredientsObject(ingredientsList):
     ingredients = []
@@ -20,10 +21,13 @@ def getIngredientsObject(ingredientsList):
         prep = ""
         desc = ""
         q = []
+        finished = True
         #print(tokenized)
 
         for word in tokenized:
-            if word[1] == 'CD':
+            if finished == False:
+                prep += word[0] + ' '
+            elif word[1] == 'CD':
                 q.append(word[0])
                 quant += word[0] + " "
             elif word[1] in ['JJ', 'MD', 'VBZ', 'RB']:
@@ -44,7 +48,7 @@ def getIngredientsObject(ingredientsList):
                 if word[0] not in measurements:
                     if word[0] in ['ground', 'pieces', 'room', 'temperature', 'chunks', 'florets', 'strips', 'thickness']:
                         if word[0] == 'strips':
-                            prep += "cunt into " + word[0] + " "
+                            prep += "cut into " + word[0] + " "
                         else:
                             prep += word[0] + " "
                     elif "®" in word[0]:
@@ -59,9 +63,11 @@ def getIngredientsObject(ingredientsList):
                     else:
                         msmt += word[0] + " "
             elif word[1] in ['VBD', 'VBN', 'VB', 'VBG', 'VBP']:
-                if word[0] in ['minced', 'beaten']:
+                if word[0] in ['minced', 'beaten', 'drained']:
                     prep += word[0] + " "
-                elif word[0] in ['grapeseed', 'baking', 'cake', 'whipping', 'taco', 'seasoning', 'bacon', 'tomato', 'sauce', 'whipped', 'topping']:
+                elif word[0] in ['grapeseed', 'sesame', 'baking', 'cake', 'whipping', 'taco', 'seasoning', 'bacon', 'tomato', 'sauce', 'whipped', 'topping']:
+                    name += word[0] + " "
+                elif word[0] in fruits or word[0] in meat or word[0] in vegetables:
                     name += word[0] + " "
                 elif word[0] in ['needed', 'desired', 'to', 'state']:
                     pass
@@ -76,8 +82,14 @@ def getIngredientsObject(ingredientsList):
             elif word[1] == 'FW':
                 if word[0] in ['paprika']:
                     name += word[0] + " "
+            elif word[1] == 'IN':
+                if word[0] == 'into':
+                    if last_word == 'cut':
+                        finished = False
+                        prep += 'cut into' + ' '
 
             last_word = word[0] #keep track of previous word
+
 
         if len(q) > 1:
             tmp = q[1:]
@@ -311,7 +323,8 @@ def main(recipeUrl):
         print ('(4) Halve size?')
         print ('(5) Make non-vegetarian?')
         print ('(6) Change cuisine?')
-        print ('(7) Start over with new recipe?')
+        print ('(7) Make less healthy?')
+        print ('(8) Start over with new recipe?')
         choice = input()
 
         if choice == '0':
@@ -408,6 +421,12 @@ def main(recipeUrl):
                 continue
 
         if choice == '7':
+            unhealthy_ingredDict, steps = makeUnhealthy(ingredients, steps, recipeTitle, recipeObj)
+            recipeObj = {**unhealthy_ingredDict , **tools , **primaryMethods , **secondaryMethods}
+            print('\n')
+            continue
+
+        if choice == '8':
             recipeUrl = input('\nProvide a url for your recipe: ')
             main(recipeUrl)
 

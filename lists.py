@@ -40,6 +40,7 @@ healthList = {
     "chocolate chips": [1, "cacao nibs", 1],
     "soy sauce": [1, "low-sodium soy sauce", 1],
     "white rice": [1, "brown rice", 1],
+    'rice': [1, 'cauliflower rice', 1],
     "bread": [1, "whole wheat bread", 1],
     "vegetable oil": [1, "olive oil", 1],
     "shortening": [1, "fat free margarine", 1],
@@ -48,7 +49,44 @@ healthList = {
     "pizza crust": [1, "cauliflower crust", 1],
     "taco shell": [1, 'lettuce wrap', 1],
     "parmesan cheese": [1, 'nutritional yeast', 1],
-    "feta cheese": [1, 'nutritional yeast', 1]
+    "feta cheese": [1, 'nutritional yeast', 1],
+    "brown sugar": [2, 'agave nectar', .5, 'brown sugar', .5],
+    'ricotta cheese': [1, 'cottage cheese', 1],
+    'heavy cream': [1, 'evaporated milk', 1],
+    'dijon mustard': [1, 'mustard', 1],
+    'honey': [1, 'maple syrup', 1]
+}
+
+#same format as healthy
+unhealthy_list = {
+    "skim milk": [1, "milk", 1],
+    "evaporated skim milk": [1, "cream", 1],
+    "egg whites": [1, "eggs", .5],
+    "egg white": [1, "egg", .5],
+    "quinoa": [1, "couscous", 1],
+    "agave": [1, "sugar", 1],
+    "parmesan cheese": [1, 'cheddar cheese', 2],
+    "feta cheese": [1, 'gouda cheese', 2],
+    "cheese": [1, 'cheddar cheese', 2],
+    "salt": [1, 'salt', 1.5],
+    "olive oil": [1, 'vegetable oil', 1],
+    "butter": [1, 'shortening', 1],
+    'brown rice': [1, 'white rice', 1],
+    'whole wheat bread': [1, 'white bread', 1],
+    'wheat bread': [1, 'white bread', 1],
+    'bread': [1, 'white bread', 1],
+    'chicken breast': [1, 'chicken thigh', 1],
+    'low-fat milk': [1, 'milk', 1],
+    'sugar': [1, 'granulated sugar', 1.5],
+    'corn tortillas': [1, 'flour tortillas', 1],
+    'plain yogurt': [1, 'sweetened yogurt', 1],
+    'greek yogurt': [1, 'sweetened yogurt', 1],
+    'cottage cheese': [1, 'ricotta cheese', 1],
+    'evaporated milk': [1, 'heavy cream', 1],
+    'cauliflower rice': [1, 'white rice', 1],
+    'mustard': [1, 'honey mustard', 1],
+    'honey': [2, 'granulated sugar', 4, 'water', 1]
+
 }
 
 measurement_conversions = {
@@ -71,6 +109,10 @@ healthSubs = {
     "butter": "almond butter and coconut oil",
     "croutons": "almonds and walnuts",
     "mayonnaise": "greek yogurt and mayonnaise",
+}
+
+unhealthSubs = {
+    'honey': "granulated sugar and water"
 }
 
 
@@ -147,7 +189,7 @@ seafood = ["oyster", "clam", "mussel", "fish", "eel", "salmon", "trout", "shrimp
 
 pasta = ["spaghetti", "fettuccine", "lunguine", "penne", "rigatoni", "orecchiette",
  "farfalle", "pappardelle", "fusilli", "rigatoni", "orzo", "tortellini", "ziti",
- "ravioli", "macaroni", "cappelletti", "lasagne", "gnocci", "rotini"]
+ "ravioli", "macaroni", "cappelletti", "lasagne", "gnocci", "rotini", "elbow macaroni"]
 
 grains = ["rice", "barley", "quinoa", "oat", "millet", "maize",
 "rye", "whole grain", "wild rice", "brown rice", "white rice"]
@@ -197,8 +239,8 @@ toppings = ["sesame seeds", "toasted sesame seeds"]
 
 measurements = ["package", "cup", "teaspoon", "tablespoon", "ounce", "teaspoons", "pound", "pounds",
  "tablespoons", "pint", "pinch", "cups", "ounces", "slices", "packages", "cloves", "frying", "drop",
- "packet", "fluid", "head", "inch", "container", "cubes", "cube", "quart", "quarts", "halves"]
+ "packet", "fluid", "head", "inch", "container", "cubes", "cube", "quart", "quarts", "halves", "jar"]
 
 adjectivesInNames = ["black", "olive", "maple", "beef", "garlic", "sour", "lemon", "heavy", "yellow",
  "chocolate", "vegetable", "lime", "angel", "bread", "cheese", "chorizo", "chipotle",
- "jalapeno", "sazon", "spaghetti", "brownie", "chocolate", "candy", "tomato"]
+ "jalapeno", "sazon", "spaghetti", "brownie", "chocolate", "candy", "tomato", "lamb"]

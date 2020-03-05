@@ -3,7 +3,7 @@ import json
 import requests
 from nltk import pos_tag, word_tokenize
 import sys
-from lists import healthList, pasta, healthSubs
+from lists import healthList, pasta, unhealthSubs, unhealthy_list
 from nutritionInfo import tester
 
 def checkIsInt(key):
@@ -13,16 +13,13 @@ def checkIsInt(key):
     return False
   return True
 
-def makeHealthy(lala, steps, recipeTitle, recipeObj):
+def makeUnhealthy(lala, steps, recipeTitle, recipeObj):
 
-    #TEST
-#    print(ingredients[0])
-#    for i in ingredients:
-#        tester(i)
 
-    print('\nFinding healthy substitutions for your ingredients...')
+    print('\nFinding unhealthy substitutions for your ingredients...')
 
-    print(f'\nRecipe Title: Healthy {recipeTitle}\n')
+    print(f'\nRecipe Title: Unhealthy {recipeTitle}\n')
+
 
     ingredients = []
     for k in recipeObj:
@@ -44,29 +41,26 @@ def makeHealthy(lala, steps, recipeTitle, recipeObj):
     removed = []
     quant = ""
 
-    #switch out pastas
-    ingredients, steps, old_pasta = pastaSub(ingredients, steps)
 
-
-    # switch out ingredients from healthList
+    # switch out ingredients from unhealthy_list
     for ingredient in ingredients:
         ingredient["name"] = ingredient["name"].lower()
-        if ingredient["name"] in healthList:
+        if ingredient["name"] in unhealthy_list:
             substitutions.append(ingredient["name"])
             #for every substitution ingredient
             ingredientNumber = 1
-            while ingredientNumber < len(healthList.get(ingredient["name"])):
+            while ingredientNumber < len(unhealthy_list.get(ingredient["name"])):
             # adjust quantity
-                if healthList.get(ingredient["name"])[ingredientNumber + 1] != 1:
+                if unhealthy_list.get(ingredient["name"])[ingredientNumber + 1] != 1:
                     quantity = convertFractoFloat(ingredient["quantity"])
-                    new_quantity = quantity * float(healthList.get(ingredient["name"])[ingredientNumber + 1])
+                    new_quantity = quantity * float(unhealthy_list.get(ingredient["name"])[ingredientNumber + 1])
                     quant = str(new_quantity)
                 else:
                     quant = ingredient["quantity"]
 
                 #change name
                 sub = ingredient["name"]
-                name = healthList.get(ingredient["name"])[ingredientNumber]
+                name = unhealthy_list.get(ingredient["name"])[ingredientNumber]
                 msmt = ingredient["measurement"]
                 prep = ingredient["preparation"]
                 desc = ""
@@ -84,10 +78,6 @@ def makeHealthy(lala, steps, recipeTitle, recipeObj):
                 #try adding to old_ingredients
                 old_ingredients.append(ingredientObj)
                 ingredientNumber += 2
-
-        elif ingredient["name"] == 'salt':
-            removed.append(ingredient["name"])
-            continue
         else:
             old_ingredients.append(ingredient)
 
@@ -101,8 +91,8 @@ def makeHealthy(lala, steps, recipeTitle, recipeObj):
     for ingredient in healthy_ingredients:
         # switch out old ingredients from directions
         if ingredient["substitution"] not in alreadySubbed:
-            if ingredient["substitution"] in healthSubs:
-                sub = healthSubs.get(ingredient["substitution"])
+            if ingredient["substitution"] in unhealthSubs:
+                sub = unhealthSubs.get(ingredient["substitution"])
             else:
                 sub = ingredient["name"]
 
@@ -113,10 +103,7 @@ def makeHealthy(lala, steps, recipeTitle, recipeObj):
                     steps[i] = steps[i].replace(ingredient["substitution"], sub)
 
     for ingredient in old_ingredients:
-        # if spaghetti squash
-        if ingredient["name"] == "squash" and ingredient["descriptors"] == "as pasta replacement":
-            print(f'Ingredient Name: {ingredient["name"]} (substitution for {old_pasta})')
-        elif "substitution" in ingredient:
+        if "substitution" in ingredient:
             if ingredient["name"] == ingredient["substitution"]:
                 print(f'Ingredient Name: {ingredient["name"]} (altered quantity)')
             else:
@@ -153,30 +140,3 @@ def convertFractoFloat(number):
             value = float(frac[0]) / float(frac[1])
         total += value
     return total
-
-
-def pastaSub(ingredients, steps):
-    old_pasta = ""
-    for ingredient in ingredients:
-        if ingredient["name"] in pasta:
-            old_pasta = ingredient["name"]
-            ingredient["name"] = "squash"
-            #quant = ingredient["quantity"]
-            #msmt = ingredient["measurement"]
-            ingredient["preparation"] = ""
-            ingredient["descriptors"] = "as pasta replacement"
-
-
-
-            indx = 1
-            for i in range(len(steps) - 1):
-                if (old_pasta in steps[i] or "pasta" in steps[i]) and "boil" in steps[i]:
-                    steps[i] = "Bring a large pot of lightly salted water to a boil. Boil squash for about 20 minutes. Once ready, use a fork to separate the flesh into spaghetti-like strings."
-                if(old_pasta in steps[i]):
-                    steps[i] = steps[i].replace(old_pasta, ingredient["name"])
-                if("pasta" in steps[i]):
-                    steps[i] = steps[i].replace("pasta", ingredient["name"])
-
-            return ingredients, steps, old_pasta
-
-    return ingredients, steps, old_pasta
