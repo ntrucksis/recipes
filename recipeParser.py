@@ -356,7 +356,7 @@ def main(recipeUrl):
             continue
 
         if choice == '6':
-            cuisine = Cuisine(recipeObj)
+            cuisine = Cuisine(recipeObj, steps)
             cuisine.classify()
             print ('Select a cuisine to transform to:')
             print ('(1) British')
@@ -371,39 +371,39 @@ def main(recipeUrl):
 
             choice = input()
             if choice == '1':
-                recipeObj = cuisine.transform('british')
+                recipeObj, steps = cuisine.transform('british')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '2':
-                recipeObj = cuisine.transform('cajun')
+                recipeObj, steps = cuisine.transform('cajun')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '3':
-                recipeObj = cuisine.transform('chinese')
+                recipeObj, steps = cuisine.transform('chinese')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '4':
-                recipeObj = cuisine.transform('french')
+                recipeObj, steps = cuisine.transform('french')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '5':
-                recipeObj = cuisine.transform('greek')
+                recipeObj, steps = cuisine.transform('greek')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '6':
-                recipeObj = cuisine.transform('indian')
+                recipeObj, steps = cuisine.transform('indian')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '7':
-                recipeObj = cuisine.transform('italian')
+                recipeObj, steps = cuisine.transform('italian')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '8':
-                recipeObj = cuisine.transform('japanese')
+                recipeObj, steps = cuisine.transform('japanese')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
             if choice == '9':
-                recipeObj = cuisine.transform('mexican')
+                recipeObj, steps = cuisine.transform('mexican')
                 printObject(recipeObj, steps, recipeTitle)
                 continue
 
