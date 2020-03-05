@@ -4,7 +4,7 @@ import requests
 from nltk import pos_tag, word_tokenize
 import sys
 from lists import healthList, pasta, healthSubs
-# from nutritionInfo import tester
+#from nutritionInfo import tester
 
 def checkIsInt(key):
   try:
@@ -15,10 +15,7 @@ def checkIsInt(key):
 
 def makeHealthy(steps, recipeTitle, recipeObj):
 
-    #TEST
-#    print(ingredients[0])
-#    for i in ingredients:
-#        tester(i)
+
 
     print('\nFinding healthy substitutions for your ingredients...')
 
@@ -35,6 +32,10 @@ def makeHealthy(steps, recipeTitle, recipeObj):
                 "descriptors": f'{recipeObj[k]["descriptors"]}'
             }
             ingredients.append(ingredientObj)
+
+        #TEST
+    #for i in ingredients:
+    #    tester(i)
 
     old_ingredients = []
     healthy_ingredients = []
