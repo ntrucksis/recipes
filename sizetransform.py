@@ -25,16 +25,52 @@ def checkIsFrac(val):
     return False
   return True
 
+_MIXED_FORMAT = re.compile(r"""
+    \A\s*                      # optional whitespace at the start, then
+    (?P<sign>[-+]?)            # an optional sign, then
+    (?P<whole>\d+)             # integer part
+    \s+                        # whitespace
+    (?P<num>\d+)               # numerator
+    /(?P<denom>\d+)            # denominator
+    \s*\Z                      # and optional whitespace to finish
+""", re.VERBOSE)
+
+def mixed(s):
+    """Parse the string s as a (possibly mixed) fraction.
+
+        >>> mixed('1 2/3')
+        Fraction(5, 3)
+        >>> mixed(' -1 2/3 ')
+        Fraction(-5, 3)
+        >>> mixed('-0  12/15')
+        Fraction(-4, 5)
+        >>> mixed('+45/15')
+        Fraction(3, 1)
+
+    """
+    m = _MIXED_FORMAT.match(s)
+    if not m:
+        return Fraction(s)
+    d = m.groupdict()
+    result = int(d['whole']) + Fraction(int(d['num']), int(d['denom']))
+    if d['sign'] == '-':
+        return -result
+    else:
+        return result
+
 def doubleSize(recipeObject):
   for k in recipeObject:
     if checkIsInt(k):
       quant = recipeObject[k]['quantity']
       if checkIsInt(quant):
         quant = int(quant)
-        recipeObject[k]['quantity'] = str(quant * 2)
+        recipeObject[k]['quantity'] = str(Fraction(quant * 2))  
       elif checkIsFrac(quant):
         quant = Fraction(quant)
-        recipeObject[k]['quantity'] = str(quant * 2)
+        recipeObject[k]['quantity'] = str(Fraction(quant * 2))
+      else: 
+        quant = mixed(quant)
+        recipeObject[k]['quantity'] = str(Fraction(quant * 2))
   return recipeObject
 
 def halfSize(recipeObject):
@@ -47,4 +83,7 @@ def halfSize(recipeObject):
       elif checkIsFrac(quant):
         quant = Fraction(quant)
         recipeObject[k]['quantity'] = str(Fraction(quant / 2))
+      else:
+        quant = mixed(quant)
+        recipeObject[k]['quantity'] = str(Fraction((quant / 2))
   return recipeObject

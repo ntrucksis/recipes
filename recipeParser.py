@@ -334,7 +334,7 @@ def main(recipeUrl):
             break
 
         if choice == '1':
-            healthy_ingredDict, steps = makeHealthy(ingredients, steps, recipeTitle, recipeObj)
+            healthy_ingredDict, steps = makeHealthy(steps, recipeTitle, recipeObj)
             recipeObj = {**healthy_ingredDict , **tools , **primaryMethods , **secondaryMethods}
             print('\n')
             continue
@@ -421,7 +421,7 @@ def main(recipeUrl):
                 continue
 
         if choice == '7':
-            unhealthy_ingredDict, steps = makeUnhealthy(ingredients, steps, recipeTitle, recipeObj)
+            unhealthy_ingredDict, steps = makeUnhealthy(steps, recipeTitle, recipeObj)
             recipeObj = {**unhealthy_ingredDict , **tools , **primaryMethods , **secondaryMethods}
             print('\n')
             continue
