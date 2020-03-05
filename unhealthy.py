@@ -13,7 +13,7 @@ def checkIsInt(key):
     return False
   return True
 
-def makeUnhealthy(lala, steps, recipeTitle, recipeObj):
+def makeUnhealthy(steps, recipeTitle, recipeObj):
 
 
     print('\nFinding unhealthy substitutions for your ingredients...')
