@@ -86,4 +86,4 @@ def halfSize(recipeObject):
       else:
         quant = mixed(quant)
         recipeObject[k]['quantity'] = str(Fraction(quant / 2))
-    return recipeObject
+  return recipeObject
