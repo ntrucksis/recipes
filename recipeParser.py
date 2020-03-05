@@ -216,9 +216,6 @@ def getSteps(directionsList):
         steps.append(step)
     return steps
 
-def buildRepresentation(recipeObj, steps):
-    pass
-
 #Print recipe object code
 def printObject(recipeObject, steps_list, title):
   print(f'\nRecipe Title: {title}\n')
@@ -276,28 +273,7 @@ def main(recipeUrl):
     # create large dictionary that holds all ingredients, tools, primary and secondary cooking methdos
     recipeObj = {**ingredDict , **tools , **primaryMethods , **secondaryMethods}
 
-    # build our representation of the steps using the parsed info
-    # stepsRep = buildRepresentation(recipeObj, steps)
-
-    # print(recipeObj)
-    # print(recipeObj["primaryMethods"])
-    # print(recipeObj["0"]["name"])
-
     print(f'\nRecipe Title: {recipeTitle}\n')
-
-    for ingredient in ingredients:
-        print(f'Ingredient Name: {ingredient["name"]}')
-        print(f'Ingredient Quantity: {ingredient["quantity"]}')
-        print(f'Ingredient Measurement: {ingredient["measurement"]}')
-        print(f'Ingredient Preparation: {ingredient["preparation"]}')
-        print(f'Ingredient Descriptors: {ingredient["descriptors"]}')
-        print('\n')
-
-    print(f'Tools for Recipe: {tools["tools"]}\n')
-
-    print(f'Primary Cooking Methods: {primaryMethods["primaryMethods"]}\n')
-
-    print(f'Secondary Cooking Methods: {secondaryMethods["secondaryMethods"]}\n')
 
     print('Steps to Complete the Recipe: \n')
     indx = 1
