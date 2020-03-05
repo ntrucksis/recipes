@@ -8,6 +8,7 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 import recipeParser
 from fractions import Fraction
+import re
 
 #Size transformation takes in recipe object
 
